@@ -12,4 +12,7 @@
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\this_\.nuget\packages\" />
   </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)scriban\5.5.0\build\Scriban.props" Condition="Exists('$(NuGetPackageRoot)scriban\5.5.0\build\Scriban.props')" />
+  </ImportGroup>
 </Project>

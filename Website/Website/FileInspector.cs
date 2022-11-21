@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Website
+namespace googleHW
 {
     internal class FileInspector
     {
@@ -16,7 +16,7 @@ namespace Website
 
             if (Directory.Exists(filePath))
             {
-                filePath = filePath + "/index.html";
+                filePath = filePath + "/index.html";   // fix
                 if (File.Exists(filePath))
                     buffer = File.ReadAllBytes(filePath);
 
