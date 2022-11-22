@@ -26,7 +26,7 @@ public class NewsRepository : IRepository<Models.News>
 
     public Models.News GetElem(int id)
     {
-        throw new NotImplementedException();
+        return _news.Where(news => news.Id == id).FirstOrDefault();
     }
 
     public void Create(Models.News item)

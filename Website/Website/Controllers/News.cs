@@ -23,19 +23,21 @@ public class News
     // public List<Models.News> GetNews()
     public byte[] GetNews()
     {
-        
-        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/News.sbnhtml");
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/News.html");
         var template = Template.Parse(data);
         var news = new NewsRepository(connectionString).GetElemList().ToList();
         var htmlPage = template.Render(new { news = news });
         return  Encoding.UTF8.GetBytes(htmlPage);
     }
     
-    [HttpGET($"")]
-    public Models.News? GetNewsById(int id)
+    [HttpGET(@"^[0-9]+$")] // $"#^[0-9]+$#"
+    public byte[] GetNewsById(int id)
     {
-        var rep = new NewsRepository(connectionString);
-        return rep.GetElem(id);
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/SingleNews2.html");
+        var template = Template.Parse(data);
+        var news = new NewsRepository(connectionString).GetElem(id);
+        var htmlPage = template.Render(new { news = news });
+        return Encoding.UTF8.GetBytes(htmlPage);
     }
 
 

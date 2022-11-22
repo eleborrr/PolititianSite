@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -158,14 +159,8 @@ namespace googleHW
             
             if (_httpContext.Request.Url.Segments.Length < 2) return null;
 
-            if (_httpContext.Request.Url.ToString().Contains("news"))
-            {
-                var a = 2;
-            }
-
             string controllerName = _httpContext.Request.Url.Segments[1].Replace("/", "");
             
-
             var assembly = Assembly.GetExecutingAssembly();
 
             // походу здесь проверку на наличие названия Controller в атрибуте
@@ -177,9 +172,8 @@ namespace googleHW
 
             var methods = controller.GetMethods().Where(t => t.GetCustomAttributes(true)
                 .Any(attr => attr.GetType().Name == $"Http{_httpContext.Request.HttpMethod}"));
-            
-            var method = methods.FirstOrDefault();
 
+            var method = GetMethod(_httpContext, methods, controllerName);
 
             if (method == null) return null;
             
@@ -191,6 +185,41 @@ namespace googleHW
             // byte[] buffer = Encoding.UTF8.GetBytes(ret);
             // byte[] buffer = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ret));
             return buffer;
+        }
+
+        private Type GetAttributeByRequest(HttpListenerContext context)
+        {
+            return context.Request.HttpMethod switch
+            {
+                "GET" => typeof(HttpGET),
+                "POST" => typeof(HttpPOST),
+                _ => throw new ArgumentException("Unknown http method" + context.Request.HttpMethod)
+            };
+        }
+
+        private  MethodInfo? GetMethod(HttpListenerContext context,  IEnumerable<MethodInfo>? methods, string controllerName)
+        {
+            foreach (var method in methods)
+            {
+                var argValue = context.Request.RawUrl.Replace(controllerName, "").Split("/").LastOrDefault();
+                // var argValue = context.Request.RawUrl.Split("/").LastOrDefault();
+                // argValue = argValue.Remove(method.Name);
+                var methodUriValue = GetUriValue(context, method);
+                if ((Regex.IsMatch(argValue, methodUriValue) && methodUriValue != "") ||
+                    (argValue == methodUriValue && methodUriValue == ""))
+                    return method;
+            }
+
+            return null;
+        }
+
+        private string GetUriValue(HttpListenerContext context, MethodInfo method)  // берет значение uri, метод нужен для поиска нужного метода при одинаковых http но разных uri
+        {
+            var attr = GetAttributeByRequest(context);
+            var methodAttrVal = method.GetCustomAttributes(attr).FirstOrDefault();
+            var field = attr.GetField("MethodURI");
+            var res = field.GetValue(methodAttrVal).ToString();
+            return res;
         }
     }
 }

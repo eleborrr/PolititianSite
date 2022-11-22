@@ -10,7 +10,7 @@ public class News: IModel
     
     public string Content { get; set; }
     
-    public int AuthorID { get; set; }
+    public int AuthorId { get; set; }
     
     public DateTime Date { get; set; }
     
@@ -19,7 +19,7 @@ public class News: IModel
         Id = id;
         Title = title;
         Content = content;
-        AuthorID = authorId;
+        AuthorId = authorId;
         // Date = date;
     }
     

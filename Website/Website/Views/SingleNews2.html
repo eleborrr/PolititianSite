@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    <title>Some news</title>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1 class="heading-1">{{ news.title }}</h1>
+        <div class="sub-heading">
+            <p>Saterday, <span>{{ news.date }}</span></p>
+            <p class="importent">your right to know</p>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="home">
+            <div class="left">
+                <img src="img/news.jpg" class="home-img" alt="Paper photo">
+                
+            </div>
+
+            
+        </div>
+
+        <article>
+            {{news.content}}           
+        </article>
+    </div>
+</div>
+
+</body>
+</html>
