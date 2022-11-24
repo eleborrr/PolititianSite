@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>News</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="../site.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo_holder">
+        <b>News</b>
+    </div>
+</div>
+<div class="news" id="news">
+    {{ for i in 0..(debates.size - 1) }}
+    <div class="news">
+        <div class="news_info">
+            <b>{{ debates[i].AuthorID }}</b>
+            &nbsp;|&nbsp;
+            {{ date.to_string debates[i].date '%d/%m/%Y %T' 'ru-RU' }}
+        </div>
+        <div class="news_content">
+            {{ debates[i].content }}
+        </div>
+        <div class="news_comments">
+            <a>комментарии</a>
+            
+        </div>
+    </div>
+    {{~ end ~}}
+</div>
+</body>
+</html>

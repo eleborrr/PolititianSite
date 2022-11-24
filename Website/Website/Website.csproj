@@ -13,11 +13,15 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="bin\Debug\net6.0\site\news.css" />
       <None Include="bin\Debug\net6.0\site\site.css" />
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="bin\Debug\net6.0\site\style.css" />
+      <Content Include="bin\Debug\net6.0\site\register.css" />
+      <Content Include="bin\Debug\net6.0\site\registration.css" />
+      <Content Include="bin\Debug\net6.0\site\single_news.css" />
+      <Content Include="Views\css\registration.css" />
     </ItemGroup>
 
 </Project>

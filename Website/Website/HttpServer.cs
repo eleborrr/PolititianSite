@@ -8,7 +8,7 @@ using googleHW.Attributes;
 
 namespace googleHW
 {
-    public class HttpServer
+    public class HttpServer : IDisposable
     {
         HttpListener listener;
         private ServerSettings _serverSetting;
@@ -109,10 +109,16 @@ namespace googleHW
                 HttpListenerContext context = await listener.GetContextAsync();
                 HttpListenerRequest request = context.Request;
                 HttpListenerResponse response = context.Response;
-                
-                buffer = GetResponeResult(_inspector.getFile(request.RawUrl, PATH), context);
-
-                response.ContentLength64 = buffer.Length;
+                try
+                {
+                    buffer = GetResponeResult(_inspector.getFile(request.RawUrl, PATH), context);
+                    response.ContentLength64 = buffer.Length;
+                    
+                }
+                catch (Exception ex)
+                {
+                    buffer = Encoding.ASCII.GetBytes(ex.Message);
+                }
                 Stream output = response.OutputStream;
                 output.Write(buffer, 0, buffer.Length);
                 output.Close();
@@ -127,8 +133,8 @@ namespace googleHW
                 if (buffer == null)
                 {
                     buffer = MethodHandler(context, context.Response);
-                    if (buffer == null)
-                        buffer = ReturnError404(context.Response);
+                    // if (buffer == null)
+                    //     buffer = ReturnError404(context.Response);
                 }
                 else
                 {
@@ -180,7 +186,7 @@ namespace googleHW
             var queryParams = GetQuery(_httpContext, method);
             
             var ret = method.Invoke(Activator.CreateInstance(controller), queryParams);
-            response.ContentType = "text/html";
+            response.ContentType = "text/html";  // навернр не всегда должен быть text/html
             byte[] buffer = (byte[])ret; // норм или нет..?
             // byte[] buffer = Encoding.UTF8.GetBytes(ret);
             // byte[] buffer = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ret));
@@ -202,8 +208,6 @@ namespace googleHW
             foreach (var method in methods)
             {
                 var argValue = context.Request.RawUrl.Replace(controllerName, "").Split("/").LastOrDefault();
-                // var argValue = context.Request.RawUrl.Split("/").LastOrDefault();
-                // argValue = argValue.Remove(method.Name);
                 var methodUriValue = GetUriValue(context, method);
                 if ((Regex.IsMatch(argValue, methodUriValue) && methodUriValue != "") ||
                     (argValue == methodUriValue && methodUriValue == ""))
@@ -220,6 +224,11 @@ namespace googleHW
             var field = attr.GetField("MethodURI");
             var res = field.GetValue(methodAttrVal).ToString();
             return res;
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)listener).Dispose();
         }
     }
 }

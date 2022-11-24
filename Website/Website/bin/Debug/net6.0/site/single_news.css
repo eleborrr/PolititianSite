@@ -131,6 +131,39 @@ blockquote::before {
     break-inside: avoid;
 }
 
+.comment{
+    width: 100%;
+    border: 1px solid #96989e;
+    margin-bottom: 10px;
+}
+
+.comment-top{
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #495867;
+    align-items: center;
+}
+
+.comment-content{
+    padding: 6px 9px;
+    overflow-x: auto;
+}
+
+.comment-bottom{
+    border-top: 1px solid #495867;
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-bottom-content{
+    margin-left: 9px;
+    color: rgba(146,154,158,.75);
+    flex: 1 1 auto;
+}
+.comment-bottom-reply{
+    margin-right: 15px;
+}
+
 @media (max-width: 950px) {
     .home {
         grid-template-columns: 1fr;

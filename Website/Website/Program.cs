@@ -1,4 +1,13 @@
 ﻿using googleHW;
 
-var serv = new HttpServer();
-serv.StartServer();
+
+using (var server = new HttpServer())
+{
+    server.StartServer();
+    while (true)
+    {
+        
+    }
+}
+
+

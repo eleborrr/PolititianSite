@@ -3,7 +3,8 @@
     <head>
         <title>News</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="../site.css">
+        <link rel="stylesheet" type="text/css" href="news.css">
+        
     </head>
     <body>
         <div class="header">
@@ -11,19 +12,15 @@
                 <b>News</b>
             </div>
         </div>
-        <div class="news" id="news">
-            {{~ for $i in 0..(news.size - 1) ~}}
+        <div class="news_list" id="news">
+            {{for i in 0..(news.size - 1) }}
             <div class="news">
                 <div class="news_info">
-                    <b>{{ news[$i].AuthorID }}</b>
+                    <a class="title" href="http://localhost:7700/news/{{news[i].id}}">{{ news[i].title }}</a>
                     &nbsp;|&nbsp;
-                    {{ date.to_string news[$i].date '%d/%m/%Y %T' 'ru-RU' }}
-                </div>
-                <div class="news_content">
-                    {{ news[$i].content }}
-                </div>
-                <div class="news_comments">
-                   <a>комментарии</a> 
+                    {{ date.to_string news[i].date '%d/%m/%Y %T' 'ru-RU' }}
+
+                    <b>{{ news[i].author_id }}</b>
                 </div>
             </div>
             {{~ end ~}}

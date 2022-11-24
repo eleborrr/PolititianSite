@@ -1,0 +1,43 @@
+﻿.html{
+    font-family: Lato,sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.news {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    align-content: center;
+    width: 100%;
+    border: 1px solid #96989e;
+    padding: 2em;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 1.5;
+    margin-bottom: 1em;
+}
+
+
+.title{
+    color: #333;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+
+@media only screen and (min-width: 64em){
+    .news {
+        width: 32%;
+        margin-right: 2%;
+        margin-bottom: 0;
+    }}
+
+@media only screen and (max-width: 75em){
+    html {
+    font-size: 11px;
+}}

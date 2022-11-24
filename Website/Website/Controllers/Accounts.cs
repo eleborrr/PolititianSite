@@ -41,7 +41,7 @@ public class Accounts
         // var password = Params[1].Split("=")[1];
         //
         // var rep = new AccountRepository(connectionString);
-        // rep.Insert(new Account(0, name, password));
+        // rep.Insert(new Account(name, password));
         //
         // listener.Response.Redirect(@"https://steamcommunity.com/login/home/");
     }

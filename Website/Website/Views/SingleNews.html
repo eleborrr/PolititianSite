@@ -1,23 +1,70 @@
-﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../single_news.css">
+    <title>Some news</title>
 </head>
 <body>
-<div class="news">
-   
-    <div class="news_info">
-        <b>{{ news.AuthorID }}</b>
-        &nbsp;|&nbsp;
-        {{ date.to_string news.date '%d/%m/%Y %T' 'ru-RU' }}
+<div class="container">
+    <header>
+        <h1 class="heading-1">{{ news.title }}</h1>
+        <div class="sub-heading">
+            <p>Saterday, <span>{{ news.date }}</span></p>
+            <p class="importent">your right to know</p>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="home">
+            
+        </div>
+
+        <article>
+            {{news.content}}           
+        </article>
     </div>
-    <div class="news_content">
-        {{ news.content }}
+    <div>____________
     </div>
-    <div class="news_comments">
-        <a>комментарии</a>
+    <div class="comments">
+        {{for comment in comments }}
+        <div class="comment">
+            <div class="comment-top">
+                <div>{{comment.id}}</div>
+                <div>{{author}}</div>
+            </div>
+            <div class="comment-content">
+                {{comment.content}}
+            </div>
+            <div class="comment-bottom">
+                <div class="comment-bottom-content">{{comment.date}}</div>
+                </div>
+            </div>
+        </div>
+        {{~ end ~}}
+    </div>
+    <div class="comment-add-field">
+        <div class="comment-content">
+            <form method="post">
+                <textarea id="reply-element"></textarea>
+                <button id="comment-bottom-reply">Отправить</button>
+            </form>
+        </div>
     </div>
 </div>
 </body>
+<script>
+    // document.getElementById('reply-element').style.display = 'none';
+    document.getElementById('comment-bottom-reply').onclick=async function(){
+        await fetch("http://localhost:7700/news/{{news.id}}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify(document.getElementById("reply-element").value)
+        });
+    };
+</script>
 </html>
