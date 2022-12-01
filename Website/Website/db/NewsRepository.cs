@@ -6,11 +6,11 @@ namespace googleHW;
 public class NewsRepository : IRepository<Models.News>
 {
     private List<Models.News> _news = new List<Models.News>();
-    private string _connectionString;
+    private string connectionString;
 
     public NewsRepository(string connectionString)
     {
-        _connectionString = connectionString;
+        this.connectionString = connectionString;
         Update();
     }
     
@@ -49,10 +49,22 @@ public class NewsRepository : IRepository<Models.News>
         throw new NotImplementedException();
     }
     
+    public void Insert(Models.News news) // создание объекта
+    {
+        var queryString = $"INSERT INTO News (Title, Content, AuthorID) VALUES (\'{news.Title}\', \'{news.Content}\',  \'{news.AuthorId}\')";
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+            var command = new SqlCommand(queryString, connection);
+            command.ExecuteNonQuery();
+        }
+        Update();
+    }
+    
     void Update() // обновление объекта
     {
         string sqlExpression = "SELECT * FROM News";
-        using (SqlConnection connection = new SqlConnection(_connectionString))
+        using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
             SqlCommand command = new SqlCommand(sqlExpression, connection);

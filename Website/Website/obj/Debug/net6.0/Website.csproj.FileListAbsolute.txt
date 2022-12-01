@@ -21,3 +21,9 @@ C:\Users\this_\Repos\PolititianSite\Website\Website\obj\Debug\net6.0\refint\Webs
 C:\Users\this_\Repos\PolititianSite\Website\Website\obj\Debug\net6.0\Website.pdb
 C:\Users\this_\Repos\PolititianSite\Website\Website\obj\Debug\net6.0\Website.genruntimeconfig.cache
 C:\Users\this_\Repos\PolititianSite\Website\Website\obj\Debug\net6.0\ref\Website.dll
+C:\Users\this_\Repos\PolititianSite\Website\Website\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\this_\Repos\PolititianSite\Website\Website\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\this_\Repos\PolititianSite\Website\Website\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\this_\Repos\PolititianSite\Website\Website\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\this_\Repos\PolititianSite\Website\Website\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+C:\Users\this_\Repos\PolititianSite\Website\Website\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll

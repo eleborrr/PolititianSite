@@ -17,7 +17,6 @@ public class News
     
     
     [HttpGET("")]
-    // public List<Models.News> GetNews()
     public byte[] GetNews()
     {
         var template = getTemplate("/Views/News.html");
@@ -38,7 +37,7 @@ public class News
 
 
     [HttpPOST(@"^[0-9]+$")]
-    public void PostComment(HttpListenerContext listener)
+    public byte[] PostComment(HttpListenerContext listener)  // + check if Authorized
     {
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         var bodyParam = sr.ReadToEnd();
@@ -48,10 +47,41 @@ public class News
         var rep = new CommentRepository(connectionString);
         rep.Insert(new Comment(3, newsId, bodyParam, 0, 0, DateTime.Today));  // authorId через куки, // news id как то через листенер
         
-        listener.Response.Redirect("http://localhost:7700/news/" + newsId);
-        listener.Response.Close();
+        // listener.Response.Redirect("http://localhost:7700/news/" + newsId);
+        // listener.Response.Close();
         
-        // return GetNewsById(newsId);
+        return GetNewsById(newsId);
+    }
+
+    [HttpGET("create")]
+    public byte[] GetCreationPage()  // + check if Authorized
+    {
+        var template = getTemplate("/Views/CreateNews.html");
+        var htmlPage = template.Render();
+        return Encoding.UTF8.GetBytes(htmlPage);
+    }
+    
+    [HttpPOST("create")]
+    public byte[] CreateNews(HttpListenerContext listener)  // + check if Authorized
+    {
+        var template = getTemplate("/Views/CreateNews.html");
+        var htmlPage = template.Render();
+        
+        using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
+        
+        var bodyParam = sr.ReadToEnd();
+        var Params = bodyParam.Split("&");
+
+        var title = Params[0].Split("=")[1];
+        var content = Params[1].Split("=")[1];
+
+        var rep = new NewsRepository(connectionString);
+        
+        rep.Insert(new Models.News(title, content, 3)); // AuthorId через сессию
+        var newsId = rep.GetElemList().Last().Id;
+        listener.Response.Redirect("/news/" + newsId);
+        return GetNewsById(newsId);
+        // return Encoding.UTF8.GetBytes(htmlPage);
     }
 
     private Template? getTemplate(string path)

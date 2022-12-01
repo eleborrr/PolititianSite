@@ -23,5 +23,13 @@ public class News: IModel
         // Date = date;
     }
     
+    public News(string title, string content, int authorId)  //, DateTime date
+    {
+        Title = title;
+        Content = content;
+        AuthorId = authorId;
+        // Date = date;
+    }
+    
     
 }

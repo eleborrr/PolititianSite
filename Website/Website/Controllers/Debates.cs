@@ -7,8 +7,6 @@ namespace googleHW.Controllers;
 [HttpController("debates")]
 public class Debates
 {
-    // поправить бд с новостями
-
     private string connectionString =
         @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PolititianDB;Integrated Security=True;";
     

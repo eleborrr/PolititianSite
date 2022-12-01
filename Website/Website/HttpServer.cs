@@ -33,7 +33,7 @@ namespace googleHW
             // PATH = _serverSetting.Path;
             listener.Start();
             Console.WriteLine("Server started");
-            Work();
+            Listen();
         }
         
         public void StopServer(string message)
@@ -59,47 +59,7 @@ namespace googleHW
             }
             return new object[] {listener};
         }
-
-
-        private void Work()
-        {
-            while (listener.IsListening)
-            {
-                Listen();
-                var command = Console.ReadLine();
-                switch (command)
-                {
-                    case "stop":
-                        StopServer("Server stopped");
-                        break;
-                    case "exit":
-                        Console.WriteLine("Exit? y/n");
-                        var inpt = Console.ReadLine();
-                        if (inpt == "y")
-                        {
-                            StopServer("see ya");
-                        }
-
-                        break;
-                    case "start":
-                        StartServer();
-                        break;
-                    case "throw":
-                        StopServer("Test exception");
-                        break;
-                    case "ping":
-                    {
-                        if (listener.IsListening)
-                            Console.WriteLine("connected");
-                        break;
-                    }
-                    default:
-                        Console.WriteLine("unknown operation");
-                        break;
-                }
-            }
-        }
-
+        
 
         private async Task Listen() {
             
@@ -133,8 +93,8 @@ namespace googleHW
                 if (buffer == null)
                 {
                     buffer = MethodHandler(context, context.Response);
-                    // if (buffer == null)
-                    //     buffer = ReturnError404(context.Response);
+                    if (buffer == null)
+                        buffer = ReturnError404(context.Response);
                 }
                 else
                 {
@@ -190,6 +150,7 @@ namespace googleHW
             byte[] buffer = (byte[])ret; // норм или нет..?
             // byte[] buffer = Encoding.UTF8.GetBytes(ret);
             // byte[] buffer = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ret));
+            Console.WriteLine(_httpContext.Request.HttpMethod);
             return buffer;
         }
 
