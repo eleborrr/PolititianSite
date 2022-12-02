@@ -26,7 +26,7 @@ public class Accounts
     public byte[] GetAccountById(HttpListenerContext listener)
     {
         int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
-        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/SingleDebate.html");
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Account.html");
         var template = Template.Parse(data);
         var debate = new AccountRepository(connectionString).GetElem(id);
         var htmlPage = template.Render(new { debate = debate });
@@ -103,7 +103,7 @@ public class Accounts
         var guid = Guid.NewGuid();
         var account = rep.GetElem(email, password);
         var session = new Session(guid, account.Id, account.Name, DateTime.Now);
-        SessionManager.CreateSession("SessionId", () => session);  // точно ли такой ключ??
+        SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
         listener.Response.AddHeader("Set-Cookie", $"SessionId={session.Id} ; path=/");
     }
 }

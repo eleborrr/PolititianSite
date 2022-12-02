@@ -32,7 +32,7 @@
         <div class="comment">
             <div class="comment-top">
                 <div>{{comment.id}}</div>
-                <div>{{authors[comment.author_id]}}</div>
+                <div><a href="/accounts/{{comment.author_id}}">{{authors[comment.author_id]}}</a></div>
             </div>
             <div class="comment-content">
                 {{comment.content}}

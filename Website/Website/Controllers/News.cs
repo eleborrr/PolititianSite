@@ -19,7 +19,7 @@ public class News
     [HttpGET("")]
     public byte[] GetNews(HttpListenerContext listener)
     {
-        var isAuthorized = SessionManager.IsAuthorized(listener);
+        var isAuthorized = SessionManager.IfAuthorizedGetSession(listener);
         var template = getTemplate("/Views/News.html");
         var news = new NewsRepository(connectionString).GetElemList().ToList();
         var htmlPage = template.Render(new { news = news , isAuthorized = isAuthorized });
@@ -31,7 +31,8 @@ public class News
     public byte[] GetNewsById(HttpListenerContext listener) 
     {
         int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
-        bool isAuthorized = SessionManager.CheckSession("SessionId");
+        
+        bool isAuthorized = SessionManager.IfAuthorized(listener);
         var template = getTemplate("/Views/SingleNews.html");
         var news = new NewsRepository(connectionString).GetElem(id);
         var comments = new CommentRepository(connectionString).GetElemList().Where(c => c.NewsId == id).Distinct().ToList();
@@ -46,15 +47,17 @@ public class News
     [HttpPOST(@"^[0-9]+$")]
     public byte[] PostComment(HttpListenerContext listener)  // + check if Authorized
     {
-        if (!SessionManager.IsAuthorized(listener))
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        if ((session is null))
             return HttpServer.ReturnError404(listener.Response);
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         var bodyParam = sr.ReadToEnd();
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
         
         var newsId = int.Parse(listener.Request.RawUrl.Split("/").Last());
 
         var rep = new CommentRepository(connectionString);
-        rep.Insert(new Comment(3, newsId, bodyParam, 0, 0, DateTime.Today));  // authorId через куки, // news id как то через листенер
+        rep.Insert(new Comment(session.AccountId, newsId, bodyParam, 0, 0, DateTime.Today)); 
         
         // listener.Response.Redirect("http://localhost:7700/news/" + newsId);
         // listener.Response.Close();
@@ -65,7 +68,8 @@ public class News
     [HttpGET("create")]
     public byte[] GetCreationPage(HttpListenerContext listener)  // + check if Authorized
     {
-        if (!SessionManager.CheckSession("SessionId"))
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        if (!(session is null))
             return HttpServer.ReturnError404(listener.Response);
         var template = getTemplate("/Views/CreateNews.html");
         var htmlPage = template.Render();
@@ -75,9 +79,9 @@ public class News
     [HttpPOST("create")]
     public byte[] CreateNews(HttpListenerContext listener)  // + check if Authorized
     {
-        if (!SessionManager.IsAuthorized(listener))
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        if (!(session is null))
             return HttpServer.ReturnError404(listener.Response);
-        SessionManager.CheckSession("SessionId");
         var template = getTemplate("/Views/CreateNews.html");
         var htmlPage = template.Render();
         
@@ -91,7 +95,7 @@ public class News
 
         var rep = new NewsRepository(connectionString);
         
-        rep.Insert(new Models.News(title, content, 3)); // AuthorId через сессию
+        rep.Insert(new Models.News(title, content, session.AccountId)); // AuthorId через сессию
         var newsId = rep.GetElemList().Last().Id;
         listener.Response.Redirect("/news/" + newsId);
         return GetNewsById(listener);
@@ -104,4 +108,6 @@ public class News
         var template = Template.Parse(data);
         return template;
     }
+
+    
 }

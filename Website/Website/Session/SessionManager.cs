@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Guid = System.Guid;
 
 namespace Political;
 
@@ -8,44 +9,50 @@ public static class SessionManager
 {
     private static readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());    
 
-    public static Session CreateSession(object key, Func<Session> createItem)
+    public static Session CreateSession(Guid id, Func<Session> createItem)
     {
         Session cacheEntry;
-        if (!_cache.TryGetValue(key, out cacheEntry)) // Ищем ключ в кэше.
+        if (!_cache.TryGetValue(id, out cacheEntry)) // Ищем ключ в кэше.
         {
             // Ключ отсутствует в кэше, поэтому получаем данные.
             cacheEntry = createItem();
             
             // Сохраняем данные в кэше. 
-            _cache.Set(key, cacheEntry, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(2)));
+            _cache.Set(id, cacheEntry, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(2)));
         }
         return cacheEntry;
     }
 
-    public static bool CheckSession(object key)
+    public static bool IfAuthorized(HttpListenerContext listener)
     {
-        return _cache.TryGetValue(key, out _);
+        var cookie = listener.Request.Cookies["SessionId"].Value;
+        if (cookie is null)
+            return false;
+        Guid id = new Guid(cookie);
+        return _cache.TryGetValue(id, out _);
     }
 
-    public static bool IsAuthorized(HttpListenerContext listener)
+    public static Session? IfAuthorizedGetSession(HttpListenerContext listener)
     {
         var key = "SessionId";
         
         var expectedValue = listener.Request.Cookies["SessionId"].Value;
         if (expectedValue is null)
-            return false;
-        
-        Session session;
-        _cache.TryGetValue(key, out session);
+            return null;
+        var key2 = new Guid(expectedValue);
+        Session session = GetSessionInfo(key2);
+        // _cache.TryGetValue(key, out session);
         if (session is null)
-            return false;
-        return expectedValue == session.Id.ToString();
+            return null;
+        if (expectedValue == session.Id.ToString())
+            return session;
+        return null;
     }
     
 
-    public static Session? GetSessionInfo(object key)
+    public static Session? GetSessionInfo(Guid id)
     {
-        return _cache.TryGetValue(key, out Session session)? session: null;
+        return _cache.TryGetValue(id, out Session session)? session: null;
     }
 }
 
