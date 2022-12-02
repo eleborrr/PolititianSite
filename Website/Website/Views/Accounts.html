@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post">
+    <textarea name="name" placeholder="type name"></textarea>
+    <textarea name="surname" placeholder="type surname"></textarea>
+    <button type="submit">Искать</button>
+</form>
+
+{{ for account in accounts}}
+<a href="/accounts/{{account.id}}">{{account.name}} {{account.surname}}</a><br>
+
+{{ end }}
+</body>
+</html>

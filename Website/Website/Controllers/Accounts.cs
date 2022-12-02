@@ -15,11 +15,34 @@ public class Accounts
         @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PolititianDB;Integrated Security=True;";
     
     
-    [HttpGET("list")]
-    public List<Account> getAccounts()
+    [HttpGET("")]
+    public byte[] GetAccounts(HttpListenerContext listener)
     {
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Accounts.html");
+        var template = Template.Parse(data);
         var rep = new AccountRepository(connectionString);
-        return rep.GetElemList().ToList();
+        var accounts = rep.GetElemList();
+        var htmlPage = template.Render(new { accounts = accounts });
+        return Encoding.UTF8.GetBytes(htmlPage);
+    }
+    
+    [HttpPOST("")]
+    public byte[] SearchAccounts(HttpListenerContext listener)
+    {
+        using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
+        var bodyParam = sr.ReadToEnd();
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
+
+        var name = parsed["name"];
+        var surname = parsed["surname"];
+        
+        var rep = new AccountRepository(connectionString);
+        var accounts = rep.GetElemList(name, surname);
+        
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Accounts.html");
+        var template = Template.Parse(data);
+        var htmlPage = template.Render(new { accounts =accounts} );
+        return Encoding.UTF8.GetBytes(htmlPage);
     }
     
     [HttpGET(@"^[0-9]+$")]

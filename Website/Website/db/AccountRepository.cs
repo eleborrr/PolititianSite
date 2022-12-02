@@ -24,6 +24,16 @@ public class AccountRepository: IRepository<Account>
         return _accounts.Find(acc => acc.Id == id);
     }
 
+    public IEnumerable<Account> GetElemList(string? name, string? surname)
+    {
+        var result = _accounts;
+        if (name != "")
+            _accounts = _accounts.Where(acc => acc.Name == name).ToList();
+        if (surname != "")
+            _accounts = _accounts.Where(acc => acc.Surname == surname).ToList();
+        return _accounts;
+    }
+
     public void Create(Account item)
     {
         throw new NotImplementedException();
