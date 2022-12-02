@@ -30,12 +30,16 @@ public static class SessionManager
     public static bool IsAuthorized(HttpListenerContext listener)
     {
         var key = "SessionId";
+        
         var expectedValue = listener.Request.Cookies["SessionId"].Value;
         if (expectedValue is null)
             return false;
-        Session _;
-        _cache.TryGetValue(key, out _);
-        return expectedValue == _.Id.ToString();
+        
+        Session session;
+        _cache.TryGetValue(key, out session);
+        if (session is null)
+            return false;
+        return expectedValue == session.Id.ToString();
     }
     
 

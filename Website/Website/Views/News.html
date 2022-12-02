@@ -7,6 +7,11 @@
         
     </head>
     <body>
+        {{ if is_authorized }}
+        <div class="create-news-link">
+            <a href="/news/create"></a>
+        </div>
+        {{ end }}
         <div class="header">
             <div class="logo_holder">
                 <b>News</b>

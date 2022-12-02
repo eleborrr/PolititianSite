@@ -19,22 +19,26 @@ public class News
     [HttpGET("")]
     public byte[] GetNews(HttpListenerContext listener)
     {
+        var isAuthorized = SessionManager.IsAuthorized(listener);
         var template = getTemplate("/Views/News.html");
         var news = new NewsRepository(connectionString).GetElemList().ToList();
-        var htmlPage = template.Render(new { news = news });
+        var htmlPage = template.Render(new { news = news , isAuthorized = isAuthorized });
 
         return  Encoding.UTF8.GetBytes(htmlPage);
     }
     
     [HttpGET(@"^[0-9]+$")] // $"#^[0-9]+$#"
-    public byte[] GetNewsById(HttpListenerContext listener)  // zhdi oshibku, nado razobrat kak poluchit ID cherez listener
+    public byte[] GetNewsById(HttpListenerContext listener) 
     {
         int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
         bool isAuthorized = SessionManager.CheckSession("SessionId");
         var template = getTemplate("/Views/SingleNews.html");
         var news = new NewsRepository(connectionString).GetElem(id);
-        var comments = new CommentRepository(connectionString).GetElemList().Where(c => c.NewsId == id).ToList();
-        var htmlPage = template.Render(new { news= news, comments = comments, author = "TODO AUTHOR NAME", isAuthorized = isAuthorized});
+        var comments = new CommentRepository(connectionString).GetElemList().Where(c => c.NewsId == id).Distinct().ToList();
+        var commentsAuthorsId = comments.Select(c => c.AuthorId);
+        var authors = new AccountRepository(connectionString).GetElemList()
+            .Where(a => commentsAuthorsId.Contains(a.Id)).ToDictionary(key => key.Id, val => val.Name);
+        var htmlPage = template.Render(new { news= news, comments = comments, authors = authors, isAuthorized = isAuthorized});
         return Encoding.UTF8.GetBytes(htmlPage);
     }
 
