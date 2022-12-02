@@ -1,11 +1,11 @@
 ﻿using System.Data.SqlClient;
 using System.Net;
 using System.Text;
-using googleHW.Attributes;
-using googleHW.Models;
+using Political.Models;
+using Political.Attributes;
 using Scriban;
 
-namespace googleHW.Controllers;
+namespace Political.Controllers;
 
 [HttpController("news")]
 public class News
@@ -17,21 +17,24 @@ public class News
     
     
     [HttpGET("")]
-    public byte[] GetNews()
+    public byte[] GetNews(HttpListenerContext listener)
     {
         var template = getTemplate("/Views/News.html");
         var news = new NewsRepository(connectionString).GetElemList().ToList();
         var htmlPage = template.Render(new { news = news });
+
         return  Encoding.UTF8.GetBytes(htmlPage);
     }
     
     [HttpGET(@"^[0-9]+$")] // $"#^[0-9]+$#"
-    public byte[] GetNewsById(int id)
+    public byte[] GetNewsById(HttpListenerContext listener)  // zhdi oshibku, nado razobrat kak poluchit ID cherez listener
     {
+        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
+        bool isAuthorized = SessionManager.CheckSession("SessionId");
         var template = getTemplate("/Views/SingleNews.html");
         var news = new NewsRepository(connectionString).GetElem(id);
         var comments = new CommentRepository(connectionString).GetElemList().Where(c => c.NewsId == id).ToList();
-        var htmlPage = template.Render(new { news= news, comments = comments, author = "TODO AUTHOR NAME" });
+        var htmlPage = template.Render(new { news= news, comments = comments, author = "TODO AUTHOR NAME", isAuthorized = isAuthorized});
         return Encoding.UTF8.GetBytes(htmlPage);
     }
 
@@ -39,6 +42,8 @@ public class News
     [HttpPOST(@"^[0-9]+$")]
     public byte[] PostComment(HttpListenerContext listener)  // + check if Authorized
     {
+        if (!SessionManager.IsAuthorized(listener))
+            return HttpServer.ReturnError404(listener.Response);
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         var bodyParam = sr.ReadToEnd();
         
@@ -50,12 +55,14 @@ public class News
         // listener.Response.Redirect("http://localhost:7700/news/" + newsId);
         // listener.Response.Close();
         
-        return GetNewsById(newsId);
+        return GetNewsById(listener);
     }
 
     [HttpGET("create")]
-    public byte[] GetCreationPage()  // + check if Authorized
+    public byte[] GetCreationPage(HttpListenerContext listener)  // + check if Authorized
     {
+        if (!SessionManager.CheckSession("SessionId"))
+            return HttpServer.ReturnError404(listener.Response);
         var template = getTemplate("/Views/CreateNews.html");
         var htmlPage = template.Render();
         return Encoding.UTF8.GetBytes(htmlPage);
@@ -64,23 +71,26 @@ public class News
     [HttpPOST("create")]
     public byte[] CreateNews(HttpListenerContext listener)  // + check if Authorized
     {
+        if (!SessionManager.IsAuthorized(listener))
+            return HttpServer.ReturnError404(listener.Response);
+        SessionManager.CheckSession("SessionId");
         var template = getTemplate("/Views/CreateNews.html");
         var htmlPage = template.Render();
         
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         
         var bodyParam = sr.ReadToEnd();
-        var Params = bodyParam.Split("&");
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
 
-        var title = Params[0].Split("=")[1];
-        var content = Params[1].Split("=")[1];
+        var title = parsed["title"];
+        var content = parsed["content"];
 
         var rep = new NewsRepository(connectionString);
         
         rep.Insert(new Models.News(title, content, 3)); // AuthorId через сессию
         var newsId = rep.GetElemList().Last().Id;
         listener.Response.Redirect("/news/" + newsId);
-        return GetNewsById(newsId);
+        return GetNewsById(listener);
         // return Encoding.UTF8.GetBytes(htmlPage);
     }
 

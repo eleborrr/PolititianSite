@@ -1,9 +1,9 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using googleHW.Interfaces;
-using googleHW.Models;
+using Political.Interfaces;
+using Political.Models;
 
-namespace googleHW;
+namespace Political;
 
 public class Database
 {

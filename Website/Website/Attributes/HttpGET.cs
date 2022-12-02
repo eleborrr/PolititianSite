@@ -1,4 +1,4 @@
-﻿namespace googleHW.Attributes;
+﻿namespace Political.Attributes;
 
 internal class HttpGET: Attribute
 {

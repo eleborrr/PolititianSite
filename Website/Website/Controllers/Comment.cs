@@ -1,4 +1,4 @@
-﻿namespace googleHW.Controllers;
+﻿namespace Political.Controllers;
 
 public class Comment
 {

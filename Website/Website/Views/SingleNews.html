@@ -44,6 +44,7 @@
         </div>
         {{~ end ~}}
     </div>
+    {{ if is_authorized}}
     <div class="comment-add-field">
         <div class="comment-content">
 <!--            <form method="post">-->
@@ -52,6 +53,7 @@
 <!--            </form>-->
         </div>
     </div>
+    {{ end }}
 </div>
 </body>
 <script>

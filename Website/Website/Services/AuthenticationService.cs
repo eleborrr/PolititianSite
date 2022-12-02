@@ -1,4 +1,4 @@
-﻿namespace googleHW.Services;
+﻿namespace Political.Services;
 
 public class AuthenticationService: IAuthenticationService
 {

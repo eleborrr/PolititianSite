@@ -1,6 +1,6 @@
-﻿using googleHW.Interfaces;
+﻿using Political.Interfaces;
 
-namespace googleHW.Models;
+namespace Political.Models;
 
 public class Debate: IModel
 {

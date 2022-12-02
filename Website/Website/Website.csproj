@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="bin\Debug\net6.0\site\profile.css" />
       <Content Include="bin\Debug\net6.0\site\register.css" />
       <Content Include="bin\Debug\net6.0\site\registration.css" />
       <Content Include="bin\Debug\net6.0\site\single_news.css" />

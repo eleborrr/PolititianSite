@@ -1,4 +1,6 @@
-﻿namespace googleHW;
+﻿using System.Net;
+
+namespace Political;
 
 using Microsoft.Extensions.Caching.Memory;
 
@@ -22,8 +24,20 @@ public static class SessionManager
 
     public static bool CheckSession(object key)
     {
-        return !_cache.TryGetValue(key, out _);
+        return _cache.TryGetValue(key, out _);
     }
+
+    public static bool IsAuthorized(HttpListenerContext listener)
+    {
+        var key = "SessionId";
+        var expectedValue = listener.Request.Cookies["SessionId"].Value;
+        if (expectedValue is null)
+            return false;
+        Session _;
+        _cache.TryGetValue(key, out _);
+        return expectedValue == _.Id.ToString();
+    }
+    
 
     public static Session? GetSessionInfo(object key)
     {

@@ -1,20 +1,16 @@
 ﻿using System.Data.SqlClient;
 using System.Net;
 using System.Text;
-using googleHW.Attributes;
-using googleHW.Models;
+using Political.Attributes;
+using Political.Models;
 using Scriban;
 
 
-namespace googleHW.Controllers;
+namespace Political.Controllers;
 
 [HttpController("accounts")]
 public class Accounts
 {
-    //Get /accounts/ - spisok accauntov
-    //Get /accounts/{id} - account
-    //POST /accounts - dobavl9t infu na server cherez body
-    
     string connectionString =
         @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PolititianDB;Integrated Security=True;";
     
@@ -27,8 +23,9 @@ public class Accounts
     }
     
     [HttpGET(@"^[0-9]+$")]
-    public byte[] GetAccountById(int id)
+    public byte[] GetAccountById(HttpListenerContext listener)
     {
+        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/SingleDebate.html");
         var template = Template.Parse(data);
         var debate = new AccountRepository(connectionString).GetElem(id);
@@ -42,30 +39,24 @@ public class Accounts
     {
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         var bodyParam = sr.ReadToEnd();
-        var Params = bodyParam.Split("&");
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
+
+        var name = parsed["name"];
+        var surname = parsed["surname"];
+        var email = parsed["email"];
+
+        var about = parsed["about"];
+        var organization = parsed["organization"];
+        var password = parsed["password"];
         
-        var name = Params[0].Split("=")[1];
-        var surname = Params[1].Split("=")[1];
-        var email = Params[2].Split("=")[1];
-
-        var about = Params[3].Split("=")[1];
-        var organization = Params[4].Split("=")[1];
-        var password = Params[5].Split("=")[1];
-
-
         var rep = new AccountRepository(connectionString);
         
-        
         var acc = rep.GetElem(email, password);
-        // cookie.Value = new string[]{ "IsAuthorize = true", "Id = { rep.GetAccount(name, password).Id}" };
+        
         if (acc is null)
         {
             rep.Insert(new Account(name, surname, password, about, organization, email));
-            var guid = Guid.NewGuid();
-            var account = rep.GetElem(email, password);
-            var session = new Session(guid, account.Id, account.Name, DateTime.Now);
-            SessionManager.CreateSession(guid, () => session);
-            listener.Response.AddHeader("Set-Cookie", $"SessionId={session.Id}");
+            CreateSession(listener, rep, email, password);
         }
     }
     
@@ -76,6 +67,43 @@ public class Accounts
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/RegisterBrandNew.html");
         var template = Template.Parse(data);
         var htmlPage = template.Render();
+        
         return Encoding.UTF8.GetBytes(htmlPage);
+    }
+    
+    [HttpGET("login")]
+    public byte[] Login(HttpListenerContext listener)
+    {
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Login.html");
+        var template = Template.Parse(data);
+        var htmlPage = template.Render();
+        return Encoding.UTF8.GetBytes(htmlPage);
+    }
+    
+    [HttpPOST("login")]
+    public byte[] LoginAccount(HttpListenerContext listener)  // + remember me
+    {
+        using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
+        var bodyParam = sr.ReadToEnd();
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
+
+        var email = parsed["email"];
+        var password = parsed["password"];
+
+        var rep = new AccountRepository(connectionString);
+        
+        var acc = rep.GetElem(email, password); // if acc == null LOGIN ERROR
+        CreateSession(listener, rep, email, password);
+        listener.Response.Redirect("/news");
+        return new News().GetNews(listener);
+    }
+
+    private void CreateSession(HttpListenerContext listener, AccountRepository rep, string email, string password)  // сделать валидацию, в логине при неполных данных эксепшн
+    {
+        var guid = Guid.NewGuid();
+        var account = rep.GetElem(email, password);
+        var session = new Session(guid, account.Id, account.Name, DateTime.Now);
+        SessionManager.CreateSession("SessionId", () => session);  // точно ли такой ключ??
+        listener.Response.AddHeader("Set-Cookie", $"SessionId={session.Id} ; path=/");
     }
 }

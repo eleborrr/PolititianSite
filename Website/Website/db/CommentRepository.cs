@@ -1,8 +1,8 @@
 ﻿using System.Data.SqlClient;
-using googleHW.Controllers;
-using googleHW.Models;
+using Political.Models;
+using Political.Controllers;
 
-namespace googleHW;
+namespace Political;
 
 public class CommentRepository : IRepository<Comment>
 {

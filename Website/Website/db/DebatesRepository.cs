@@ -1,8 +1,8 @@
 ﻿using System.Data.SqlClient;
-using googleHW.Controllers;
-using googleHW.Models;
+using Political.Controllers;
+using Political.Models;
 
-namespace googleHW;
+namespace Political;
 
 public class DebatesRepository : IRepository<Debate>
 {

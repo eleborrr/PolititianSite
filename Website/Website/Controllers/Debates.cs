@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using googleHW.Attributes;
+using Political.Attributes;
 using Scriban;
 
-namespace googleHW.Controllers;
+namespace Political.Controllers;
 
 [HttpController("debates")]
 public class Debates

@@ -1,4 +1,4 @@
-﻿namespace googleHW;
+﻿namespace Political;
 
 public class ConsoleHandler
 {

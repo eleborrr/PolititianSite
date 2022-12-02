@@ -1,4 +1,4 @@
-﻿namespace googleHW.Interfaces;
+﻿namespace Political.Interfaces;
 
 public class IModel
 {

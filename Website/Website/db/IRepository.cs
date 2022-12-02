@@ -1,4 +1,4 @@
-﻿namespace googleHW;
+﻿namespace Political;
 
 public interface IRepository<T> : IDisposable 
     where T : class

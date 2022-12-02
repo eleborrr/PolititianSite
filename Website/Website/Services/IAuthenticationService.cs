@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace googleHW.Services;
+namespace Political.Services;
 
 public interface IAuthenticationService
 {

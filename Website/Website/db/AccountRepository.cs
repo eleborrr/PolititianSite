@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
-using googleHW.Models;
+using Political.Models;
 
-namespace googleHW;
+namespace Political;
 
 public class AccountRepository: IRepository<Account>
 {

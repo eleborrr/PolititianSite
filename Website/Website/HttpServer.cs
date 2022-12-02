@@ -4,9 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using googleHW.Attributes;
+using Political.Attributes;
 
-namespace googleHW
+namespace Political
 {
     public class HttpServer : IDisposable
     {
@@ -22,6 +22,7 @@ namespace googleHW
             Directory.SetCurrentDirectory(path);
             listener = new HttpListener();
             listener.Prefixes.Add("http://localhost:8888/");
+            
         }
 
         public void StartServer()
@@ -112,7 +113,7 @@ namespace googleHW
             return buffer;
         }
 
-        private byte[] ReturnError404(HttpListenerResponse response)
+        public static byte[] ReturnError404(HttpListenerResponse response)
         {
             response.Headers.Set("Content-Type", "text/plain");
             response.StatusCode = (int)HttpStatusCode.NotFound;
@@ -143,9 +144,9 @@ namespace googleHW
 
             if (method == null) return null;
             
-            var queryParams = GetQuery(_httpContext, method);
+            //var queryParams = GetQuery(_httpContext, method);
             
-            var ret = method.Invoke(Activator.CreateInstance(controller), queryParams);
+            var ret = method.Invoke(Activator.CreateInstance(controller), new object[]{_httpContext});  // пока впихну чисто листенер, но вообще куериПарамс
             response.ContentType = "text/html";  // навернр не всегда должен быть text/html
             byte[] buffer = (byte[])ret; // норм или нет..?
             // byte[] buffer = Encoding.UTF8.GetBytes(ret);
