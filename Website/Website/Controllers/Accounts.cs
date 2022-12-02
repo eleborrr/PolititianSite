@@ -28,8 +28,8 @@ public class Accounts
         int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Account.html");
         var template = Template.Parse(data);
-        var debate = new AccountRepository(connectionString).GetElem(id);
-        var htmlPage = template.Render(new { debate = debate });
+        var account = new AccountRepository(connectionString).GetElem(id);
+        var htmlPage = template.Render(new { account = account });
         return Encoding.UTF8.GetBytes(htmlPage);
     }
 
@@ -95,6 +95,7 @@ public class Accounts
         var acc = rep.GetElem(email, password); // if acc == null LOGIN ERROR
         CreateSession(listener, rep, email, password);
         listener.Response.Redirect("/news");
+        // listener.Response.RedirectLocation = "/news";
         return new News().GetNews(listener);
     }
 
@@ -106,4 +107,9 @@ public class Accounts
         SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
         listener.Response.AddHeader("Set-Cookie", $"SessionId={session.Id} ; path=/");
     }
+
+    // private void TryDeleteCookie(HttpListenerContext listener)
+    // {
+    //     listener.Request.Cookies.Remove();
+    // }
 }

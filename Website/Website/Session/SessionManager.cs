@@ -18,7 +18,7 @@ public static class SessionManager
             cacheEntry = createItem();
             
             // Сохраняем данные в кэше. 
-            _cache.Set(id, cacheEntry, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(2)));
+            _cache.Set(id, cacheEntry, new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5)));
         }
         return cacheEntry;
     }
@@ -29,13 +29,13 @@ public static class SessionManager
         if (cookie is null)
             return false;
         Guid id = new Guid(cookie);
+        var test = IfAuthorizedGetSession(listener);
+        var test2 = GetSessionInfo(id);
         return _cache.TryGetValue(id, out _);
     }
 
     public static Session? IfAuthorizedGetSession(HttpListenerContext listener)
     {
-        var key = "SessionId";
-        
         var expectedValue = listener.Request.Cookies["SessionId"].Value;
         if (expectedValue is null)
             return null;

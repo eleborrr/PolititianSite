@@ -19,7 +19,7 @@ public class News
     [HttpGET("")]
     public byte[] GetNews(HttpListenerContext listener)
     {
-        var isAuthorized = SessionManager.IfAuthorizedGetSession(listener);
+        var isAuthorized = SessionManager.IfAuthorized(listener);
         var template = getTemplate("/Views/News.html");
         var news = new NewsRepository(connectionString).GetElemList().ToList();
         var htmlPage = template.Render(new { news = news , isAuthorized = isAuthorized });
@@ -69,7 +69,7 @@ public class News
     public byte[] GetCreationPage(HttpListenerContext listener)  // + check if Authorized
     {
         var session = SessionManager.IfAuthorizedGetSession(listener);
-        if (!(session is null))
+        if ((session is null))
             return HttpServer.ReturnError404(listener.Response);
         var template = getTemplate("/Views/CreateNews.html");
         var htmlPage = template.Render();
@@ -80,7 +80,7 @@ public class News
     public byte[] CreateNews(HttpListenerContext listener)  // + check if Authorized
     {
         var session = SessionManager.IfAuthorizedGetSession(listener);
-        if (!(session is null))
+        if ((session is null))
             return HttpServer.ReturnError404(listener.Response);
         var template = getTemplate("/Views/CreateNews.html");
         var htmlPage = template.Render();
