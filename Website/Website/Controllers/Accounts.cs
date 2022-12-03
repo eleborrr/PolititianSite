@@ -208,7 +208,7 @@ public class Accounts
     {
         var guid = Guid.NewGuid();
         var account = rep.GetElem(email, password);
-        var session = new Session(guid, account.Id, DateTime.Now);
+        var session = new Session(guid, account.Id, DateTime.Now); // обработка что акка нет
         SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
         listener.Response.AddHeader("Set-Cookie", $"SessionId={session.Id} ; path=/");
     }

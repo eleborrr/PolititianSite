@@ -18,14 +18,14 @@
             </div>
         </div>
         <div class="news_list" id="news">
-            {{for i in 0..(news.size - 1) }}
+            {{for news1 in news }}
             <div class="news">
                 <div class="news_info">
-                    <a class="title" href="http://localhost:7700/news/{{news[i].id}}">{{ news[i].title }}</a>
+                    <a class="title" href="http://localhost:7700/news/{{news[i].id}}">{{ news1.title }}</a>
                     &nbsp;|&nbsp;
-                    {{ date.to_string news[i].date '%d/%m/%Y %T' 'ru-RU' }}
+                    {{ date.to_string news1.date '%d/%m/%Y %T' 'ru-RU' }}
 
-                    <b>{{ news[i].author_id }}</b>
+                    <b>{{ news1.author_id }}</b>
                 </div>
             </div>
             {{~ end ~}}

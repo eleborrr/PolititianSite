@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using Political.Attributes;
 using Scriban;
 
@@ -12,8 +13,7 @@ public class Debates
     
     
     [HttpGET("")]
-    // public List<Models.News> GetNews()
-    public byte[] GetDebates()
+    public byte[] GetDebates(HttpListenerContext listener)
     {
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Debates.html");
         var template = Template.Parse(data);
@@ -22,9 +22,10 @@ public class Debates
         return  Encoding.UTF8.GetBytes(htmlPage);
     }
     
-    [HttpGET(@"^[0-9]+$")] // $"#^[0-9]+$#"
-    public byte[] GetDebateById(int id)
+    [HttpGET(@"^[0-9]+$")] 
+    public byte[] GetDebateById(HttpListenerContext listener)
     {
+        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/SingleDebate.html");
         var template = Template.Parse(data);
         var debate = new DebatesRepository(connectionString).GetElem(id);
@@ -32,9 +33,5 @@ public class Debates
         return Encoding.UTF8.GetBytes(htmlPage);
     }
 
-    // [HttpPOST(@"^[0-9]+$")]
-    // public byte[] SendComment()
-    // {
-    //     
-    // }
+    
 }

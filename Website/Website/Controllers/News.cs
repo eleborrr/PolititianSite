@@ -19,9 +19,16 @@ public class News
     [HttpGET("")]
     public byte[] GetNews(HttpListenerContext listener)
     {
-        var isAuthorized = SessionManager.IfAuthorized(listener);
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        var isAuthorized = session is not null;
         var template = getTemplate("/Views/News.html");
         var news = new NewsRepository(connectionString).GetElemList().ToList();
+        if (isAuthorized)
+        {
+            var subscribes = new AccountRepository(connectionString).GetSubscribers()
+                .Where(s => s.SubscriberId == session.AccountId).Select(s => s.RecieverId).ToList();
+            news = news.Where(n => subscribes.Contains(n.AuthorId)).ToList();
+        }
         var htmlPage = template.Render(new { news = news , isAuthorized = isAuthorized });
 
         return  Encoding.UTF8.GetBytes(htmlPage);
