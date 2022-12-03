@@ -50,6 +50,19 @@ public class DebatesRepository : IRepository<Debate>
         throw new NotImplementedException();
     }
     
+    public void Insert(Debate debate) // создание объекта
+    {
+        var queryString = $"INSERT INTO Debates (AuthorId, Likes, CreationDate, Content, Title, Dislikes) VALUES (\'{debate.AuthorId}\', \'{debate.Likes}\', " +
+                          $"\'{debate.Date}\', \'{debate.Title}\', \'{debate.Dislikes}\')";
+        using (SqlConnection connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+            var command = new SqlCommand(queryString, connection);
+            command.ExecuteNonQuery();
+        }
+        Update();
+    }
+    
     void Update() // обновление объекта
     {
         string sqlExpression = "SELECT * FROM Debates";
@@ -66,11 +79,12 @@ public class DebatesRepository : IRepository<Debate>
                     int id = reader.GetInt32(0);
                     int authorId = reader.GetInt32(1);
                     int likes = reader.GetInt32(2);
-                    int dislikes = reader.GetInt32(3);
-                    DateTime date = reader.GetDateTime(4);
-                    string content = reader.GetString(5);
-                    string title = reader.GetString(6);
-                    _debates.Add(new Debate(id,authorId, title, content, likes, dislikes, date));
+                    
+                    //DateTime date = reader.GetDateTime(4);
+                    string content = reader.GetString(4);
+                    string title = reader.GetString(5);
+                    int dislikes = reader.GetInt32(6);
+                    _debates.Add(new Debate(id,authorId, title, content, likes, dislikes, DateTime.Now));
                 }
             }
             reader.Close();

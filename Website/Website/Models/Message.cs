@@ -1,12 +1,12 @@
-﻿namespace Political.Controllers;
+﻿namespace Political.Models;
 
-public class Comment
+public class Message
 {
     public int Id { get; set; }
     
     public int AuthorId { get; set; }
 
-    public int NewsId { get; set; }
+    public int DebateId { get; set; }
     
     public string Content { get; set; }
     
@@ -16,21 +16,21 @@ public class Comment
     
     public DateTime Date { get; set; }
 
-    public Comment(int id, int authorId, int newsId, string content, int likes, int dislikes, DateTime date)
+    public Message(int id, int authorId, int debateId, string content, int likes, int dislikes, DateTime date)
     {
         Id = id;
         AuthorId = authorId;
-        NewsId = newsId;
+        DebateId = debateId;
         Content = content;
         Likes = likes;
         Dislikes = dislikes;
         Date = date;
     }
     
-    public Comment(int authorId, int newsId, string content, int likes, int dislikes, DateTime date)
+    public Message(int authorId, int debateId, string content, int likes, int dislikes, DateTime date)
     {
         AuthorId = authorId;
-        NewsId = newsId;
+        DebateId = debateId;
         Content = content;
         Likes = likes;
         Dislikes = dislikes;

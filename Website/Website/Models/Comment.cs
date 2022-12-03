@@ -1,14 +1,12 @@
-﻿using Political.Interfaces;
+﻿namespace Political.Models;
 
-namespace Political.Models;
-
-public class Debate: IModel
+public class Comment
 {
     public int Id { get; set; }
     
     public int AuthorId { get; set; }
-    
-    public string Title { get; set; }
+
+    public int NewsId { get; set; }
     
     public string Content { get; set; }
     
@@ -17,22 +15,22 @@ public class Debate: IModel
     public int Dislikes { get; set; }
     
     public DateTime Date { get; set; }
-    
-    public Debate(int id, int authorId, string title, string content, int likes, int dislikes, DateTime date)
+
+    public Comment(int id, int authorId, int newsId, string content, int likes, int dislikes, DateTime date)
     {
         Id = id;
         AuthorId = authorId;
-        Title = title;
+        NewsId = newsId;
         Content = content;
         Likes = likes;
         Dislikes = dislikes;
         Date = date;
     }
     
-    public Debate(int authorId, string title, string content, int likes, int dislikes, DateTime date)
+    public Comment(int authorId, int newsId, string content, int likes, int dislikes, DateTime date)
     {
         AuthorId = authorId;
-        Title = title;
+        NewsId = newsId;
         Content = content;
         Likes = likes;
         Dislikes = dislikes;

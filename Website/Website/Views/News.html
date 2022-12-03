@@ -21,7 +21,7 @@
             {{for news1 in news }}
             <div class="news">
                 <div class="news_info">
-                    <a class="title" href="http://localhost:7700/news/{{news[i].id}}">{{ news1.title }}</a>
+                    <a class="title" href="http://localhost:7700/news/{{news1.id}}">{{ news1.title }}</a>
                     &nbsp;|&nbsp;
                     {{ date.to_string news1.date '%d/%m/%Y %T' 'ru-RU' }}
 

@@ -3,28 +3,29 @@
 <head>
     <title>News</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="../site.css">
+    <link rel="stylesheet" type="text/css" href="news.css">
+
 </head>
 <body>
+{{ if is_authorized }}
+<div class="create-news-link">
+    <a href="/debates/create">Create debate</a>
+</div>
+{{ end }}
 <div class="header">
     <div class="logo_holder">
         <b>News</b>
     </div>
 </div>
-<div class="news" id="news">
-    {{ for i in 0..(debates.size - 1) }}
+<div class="news_list" id="debates">
+    {{for debate in debates }}
     <div class="news">
         <div class="news_info">
-            <b>{{ debates[i].AuthorID }}</b>
+            <a class="title" href="http://localhost:7700/debates/{{debate.id}}">{{ debate.title }}</a>
             &nbsp;|&nbsp;
-            {{ date.to_string debates[i].date '%d/%m/%Y %T' 'ru-RU' }}
-        </div>
-        <div class="news_content">
-            {{ debates[i].content }}
-        </div>
-        <div class="news_comments">
-            <a>комментарии</a>
-            
+            {{ date.to_string debate.date '%d/%m/%Y %T' 'ru-RU' }}
+
+            <b>{{ debate.author_id }}</b>
         </div>
     </div>
     {{~ end ~}}

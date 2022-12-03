@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Scriban;
 
 namespace Political
 {
-    internal class FileInspector
+    internal static class FileInspector
     {
+        public static Template? getTemplate(string path)
+        {
+            var data = File.ReadAllText(Directory.GetCurrentDirectory() + path);
+            var template = Template.Parse(data);
+            return template;
+        }
         
-        public byte[] getFile(string rawUrl, string _filePath)
+        public static byte[] getFile(string rawUrl, string _filePath)
         {
             byte[] buffer = null;
             var filePath = _filePath + rawUrl;
@@ -26,7 +33,7 @@ namespace Political
             return buffer;
         }
 
-        public string getContentType(string rawUrl)
+        public static string getContentType(string rawUrl)
         {
             var images = new string[] { "jpg", "jpeg", "png" };
             var text = new string[] { "html", "css", "xml" };

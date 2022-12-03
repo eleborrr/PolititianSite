@@ -12,7 +12,6 @@ namespace Political
     {
         HttpListener listener;
         private ServerSettings _serverSetting;
-        private FileInspector _inspector = new FileInspector();
         string PATH = Directory.GetCurrentDirectory() + "/site";
 
         public HttpServer()
@@ -72,7 +71,7 @@ namespace Political
                 HttpListenerResponse response = context.Response;
                 try
                 {
-                    buffer = GetResponeResult(_inspector.getFile(request.RawUrl, PATH), context);
+                    buffer = GetResponeResult(FileInspector.getFile(request.RawUrl, PATH), context);
                     response.ContentLength64 = buffer.Length;
                     
                 }
@@ -99,7 +98,7 @@ namespace Political
                 }
                 else
                 {
-                    var _type = _inspector.getContentType(context.Request.RawUrl);
+                    var _type = FileInspector.getContentType(context.Request.RawUrl);
                     context.Response.Headers.Set("Content-Type", _type);
                 }
             }

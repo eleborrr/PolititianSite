@@ -3,8 +3,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style.css">
-    <title>Debate</title>
+    <link rel="stylesheet" href="../single_news.css">
+    <title>Some news</title>
 </head>
 <body>
 <div class="container">
@@ -18,11 +18,6 @@
 
     <div class="main">
         <div class="home">
-            <div class="left">
-                <img src="img/news.jpg" class="home-img" alt="Paper photo">
-
-            </div>
-
 
         </div>
 
@@ -30,7 +25,50 @@
             {{debate.content}}
         </article>
     </div>
+    <div>____________
+    </div>
+    <div class="comments">
+        {{for message in messages }}
+        <div class="comment">
+            <div class="comment-top">
+                <div>{{message.id}}</div>
+                <div><a href="/accounts/{{comment.author_id}}">{{authors[message.author_id]}}</a></div>
+            </div>
+            <div class="comment-content">
+                {{message.content}}
+            </div>
+            <div class="comment-bottom">
+                <div class="comment-bottom-content">{{message.date}}</div>
+            </div>
+        </div>
+    </div>
+    {{~ end ~}}
 </div>
-
+{{ if is_authorized}}
+<div class="comment-add-field">
+    <div class="comment-content">
+        <!--            <form method="post">-->
+        <textarea id="reply-element"></textarea>
+        <button type="submit" id="comment-bottom-reply">Отправить</button>
+        <!--            </form>-->
+    </div>
+</div>
+{{ end }}
+</div>
 </body>
+<script>
+    // document.getElementById('reply-element').style.display = 'none';
+    document.getElementById('comment-bottom-reply').onclick=async function(ev){
+        ev.stopPropagation();
+        await fetch("http://localhost:7700/debates/{{debate.id}}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+
+            body: JSON.stringify(document.getElementById("reply-element").value)
+        });
+        window.location.reload();
+    };
+</script>
 </html>
