@@ -1,33 +1,50 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Creative Colorlib SignUp Form</title>
+    <title>Sign Up</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="register.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="registration.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 <body>
-<div class="main">
-    <div class="main-info">
-        <div class="main-info-top">
-            <form action="#" method="post">
-                <input class="text" type="text" name="Username" placeholder="Username" required="">
-                <input class="text email" type="email" name="email" placeholder="Email" required="">
-                <input class="text" type="password" name="password" placeholder="Password" required="">
-                <input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required="">
-                <div class="wthree-text">
-                    <label class="anim">
-                        <input type="checkbox" class="checkbox" required="">
-                        <span>I Agree To The Terms & Conditions</span>
-                    </label>
-                    <div class="clear"> </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card">
+                    <h2 class="card-title text-center">Register</h2>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="surname" id="surname" placeholder="Surname">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="about" id="about" placeholder="About">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="organization" id="organization" placeholder="Organization">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="confirm-password" placeholder="confirm-password">
+                            </div>
+                            <div class="d-flex flex-row align-items-center justify-content-between">
+                                <a href="/accounts/login">Login</a>
+                                <button class="btn btn-primary" type="submit">Create Account</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <input type="submit" value="SIGNUP">
-            </form>
-            <p>Don't have an Account? <a href="#"> Login Now!</a></p>
+            </div>
         </div>
     </div>
-   
-</div>
 </body>
 </html>

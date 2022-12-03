@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections.Specialized;
+using System.Data.SqlClient;
 using System.Net;
 using System.Text;
 using Political.Attributes;
@@ -48,14 +49,55 @@ public class Accounts
     [HttpGET(@"^[0-9]+$")]
     public byte[] GetAccountById(HttpListenerContext listener)
     {
-        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
+        var isAuthorized = SessionManager.IfAuthorized(listener);
+        int id;
+        try{id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());}
+        catch (Exception ex) {id = int.Parse(listener.Response.Headers["User-Id"]);}
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Account.html");
         var template = Template.Parse(data);
-        var account = new AccountRepository(connectionString).GetElem(id);
-        var htmlPage = template.Render(new { account = account });
+
+        var rep = new AccountRepository(connectionString);
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        var account = rep.GetElem(id);
+
+        bool isSubscribed = false;
+        if (session is not null)
+            isSubscribed = rep.GetSubscription(session.AccountId, id) is not null ? true : false; // тут баг мб
+        bool ownProfile = false;
+        if (session is not null)
+            ownProfile = session.AccountId == id;
+        var htmlPage = template.Render(new { account = account, isAuthorized = isAuthorized, isSubscribed = isSubscribed, ownProfile = ownProfile});
         return Encoding.UTF8.GetBytes(htmlPage);
     }
+    
+    [HttpPOST(@"^[0-9]+$")]
+    public byte[] PostHandle(HttpListenerContext listener)
+    {
+        var isAuthorized = SessionManager.IfAuthorized(listener);
+        if(!isAuthorized)
+            return HttpServer.ReturnError404(listener.Response);
+        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
 
+        var rep = new AccountRepository(connectionString);
+        var account = rep.GetElem(id);
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        
+        using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
+        var bodyParam = sr.ReadToEnd();
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
+        
+        if(parsed["unfollow"] is not null)
+            rep.Unsubscribe(session.AccountId, id);
+        if(parsed["follow"] is not null)
+            rep.Subscribe(session.AccountId, id);
+        if (parsed["edit"] is not null)
+        {
+            listener.Response.Redirect("/accounts/edit");
+            return EditAccountGet(listener);
+        }
+        listener.Response.AddHeader("User-Id", session.AccountId.ToString());
+        return GetAccountById(listener);
+    }
 
     [HttpPOST("register")]
     public void SaveAccount(HttpListenerContext listener)
@@ -82,12 +124,11 @@ public class Accounts
             CreateSession(listener, rep, email, password);
         }
     }
-    
 
     [HttpGET("register")]
     public byte[] Register()
     {
-        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/RegisterBrandNew.html");
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Register.html");
         var template = Template.Parse(data);
         var htmlPage = template.Render();
         
@@ -121,12 +162,53 @@ public class Accounts
         // listener.Response.RedirectLocation = "/news";
         return new News().GetNews(listener);
     }
+    
+    [HttpGET("edit")]
+    public byte[] EditAccountGet(HttpListenerContext listener)
+    {
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/EditAccount.html");
+        var template = Template.Parse(data);
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        var acc = new AccountRepository(connectionString).GetElem(session.AccountId);
+        var htmlPage = template.Render(new {account = acc, edit = true});
+        return Encoding.UTF8.GetBytes(htmlPage);
+    }
+    
+    [HttpPOST("edit")]
+    public byte[] EditAccountPost(HttpListenerContext listener)
+    {
+        using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
+        var bodyParam = sr.ReadToEnd();
+        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
+
+        var rep = new AccountRepository(connectionString);
+        
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        var acc = rep.GetElem(session.AccountId);
+        ReplaceInfo(acc, parsed);
+        rep.Replace(acc);
+        listener.Response.Redirect("/accounts/" + session.AccountId);
+        listener.Response.AddHeader("User-Id", session.AccountId.ToString());
+        return GetAccountById(listener);
+    }
+
+    private void ReplaceInfo(Account acc, NameValueCollection parsed)
+    {
+        acc.Name = parsed["name"];
+        acc.Surname = parsed["surname"];
+        acc.Email = parsed["email"];
+
+        acc.About = parsed["about"];
+        acc.Organization = parsed["organization"];
+        acc.Password = parsed["password"];
+    }
+    
 
     private void CreateSession(HttpListenerContext listener, AccountRepository rep, string email, string password)  // сделать валидацию, в логине при неполных данных эксепшн
     {
         var guid = Guid.NewGuid();
         var account = rep.GetElem(email, password);
-        var session = new Session(guid, account.Id, account.Name, DateTime.Now);
+        var session = new Session(guid, account.Id, DateTime.Now);
         SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
         listener.Response.AddHeader("Set-Cookie", $"SessionId={session.Id} ; path=/");
     }

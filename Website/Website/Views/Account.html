@@ -29,10 +29,29 @@
                         <span class="number3">8.9</span>
                     </div>
                 </div>
-                {{ if}}
-                <div class="button mt-2 d-flex flex-row align-items-center">
-                    <button class="btn btn-sm btn-primary w-100 ml-2">Follow</button>
-                </div>
+                {{ if is_authorized }}
+                    {{ if !own_profile }}
+                        {{ if is_subscribed}}
+                        <form method="post">
+                        <div class="button mt-2 d-flex flex-row align-items-center">
+                            <button name="unfollow" type="submit" class="btn btn-sm btn-primary w-100 ml-2">UnFollow</button>
+                        </div>
+                        </form>
+                        {{ else }}
+                        <form method="post">
+                        <div class="button mt-2 d-flex flex-row align-items-center">
+                            <button name="follow" type="submit" class="btn btn-sm btn-primary w-100 ml-2">Follow</button>
+                        </div>
+                        </form>
+                        {{ end }}
+                    {{else}}
+                        <form method="post">
+                            <div class="button mt-2 d-flex flex-row align-items-center">
+                                <button name="edit" type="submit" class="btn btn-sm btn-primary w-100 ml-2">Edit</button>
+                            </div>
+                        </form>
+                    {{ end }}
+                {{ end }}
             </div>
         </div>
     </div>

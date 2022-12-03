@@ -62,15 +62,12 @@ public class Session
     
     public int AccountId { get; set; }
     
-    public string Email { get; set; }
-    
     public DateTime CreateDateTime { get; set; }
 
-    public Session(Guid id, int accountId, string email, DateTime date)
+    public Session(Guid id, int accountId, DateTime date)
     {
         Id = id;
         AccountId = accountId;
-        Email = email;
         CreateDateTime = date;
     }
 }
