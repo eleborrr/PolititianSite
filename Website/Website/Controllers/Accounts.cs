@@ -109,7 +109,7 @@ public class Accounts
     }
 
     [HttpPOST("register")]
-    public void SaveAccount(HttpListenerContext listener)
+    public byte[] SaveAccount(HttpListenerContext listener)
     {
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         var bodyParam = sr.ReadToEnd();
@@ -132,10 +132,16 @@ public class Accounts
             rep.Insert(new Account(name, surname, password, about, organization, email));
             CreateSession(listener, rep, email, password);
         }
+
+        acc = rep.GetElem(email, password);
+        listener.Response.AddHeader("User-Id", acc.Id.ToString());
+        listener.Response.Redirect("/accounts/" + acc.Id);
+        return GetAccountById(listener);
+
     }
 
     [HttpGET("register")]
-    public byte[] Register()
+    public byte[] Register(HttpListenerContext listener)
     {
         var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Register.html");
         var template = Template.Parse(data);
