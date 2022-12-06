@@ -7,7 +7,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 public static class SessionManager
 {
-    private static readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());    
+    private static readonly MemoryCache _cache = new MemoryCache(new MemoryCacheOptions());
+
+    public static void Logout(Guid id)
+    {
+        _cache.Remove(id);
+    }
 
     public static Session CreateSession(Guid id, Func<Session> createItem)
     {

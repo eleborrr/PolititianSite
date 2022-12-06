@@ -142,6 +142,18 @@ public class Accounts
         return GetAccountById(listener);
 
     }
+    
+    [HttpGET("logout")]
+    public byte[] Logout(HttpListenerContext listener)
+    {
+        var session = SessionManager.IfAuthorizedGetSession(listener);
+        SessionManager.Logout(session.Id);
+        var data = File.ReadAllText(Directory.GetCurrentDirectory() + "/Views/Login.html");
+        var template = Template.Parse(data);
+        var htmlPage = template.Render();
+        listener.Response.Redirect("/accounts/login");
+        return Encoding.UTF8.GetBytes(htmlPage);
+    }
 
     [HttpGET("register")]
     public byte[] Register(HttpListenerContext listener)
@@ -236,9 +248,4 @@ public class Accounts
             Path = "/",
         });   // перенести в session manager
     }
-
-    // private void TryDeleteCookie(HttpListenerContext listener)
-    // {
-    //     listener.Request.Cookies.Remove();
-    // }
 }
