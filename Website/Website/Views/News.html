@@ -2,16 +2,49 @@
 <html>
     <head>
         <title>News</title>
+        
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="news.css">
+        <link rel="stylesheet" type="text/css" href="/news_new.css">
         
     </head>
     <body>
+        <div class="site-top">
         {{ if is_authorized }}
-        <div class="create-news-link">
-            <a href="/news/create">Create news</a>
+            <a href="/news/create">
+                <div class="create-news-link glow-on-hover">
+                Create news
+                </div>
+            </a>
+            <a href="/accounts/{{ id }}">
+                <div class="create-news-link glow-on-hover">
+                    My profile
+                </div>
+            </a>
+            {{else}}
+            <a href="/accounts/login">
+                <div class="create-news-link glow-on-hover">
+                    Login
+                </div>
+            </a>
+            {{ end }}
+            <a href="/accounts">
+                <div class="create-news-link glow-on-hover">
+                    Accounts
+                </div>
+            </a>
+            <a href="/debates/">
+                <div class="create-news-link glow-on-hover">
+                    Debates
+                </div>
+            </a>
+            {{ if is_authorized }}
+            <a href="/accounts/logout">
+                <div class="create-news-link glow-on-hover">
+                    Logout
+                </div>
+            </a>
+            {{ end }}
         </div>
-        {{ end }}
         <div class="header">
             <div class="logo_holder">
                 <b>News</b>

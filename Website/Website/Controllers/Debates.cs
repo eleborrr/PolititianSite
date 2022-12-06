@@ -21,12 +21,6 @@ public class Debates
         var isAuthorized = session is not null;
         var template = FileInspector.getTemplate("/Views/Debates.html");
         var debates = new DebatesRepository(connectionString).GetElemList().ToList();
-        if (isAuthorized)
-        {
-            var subscribes = new AccountRepository(connectionString).GetSubscribers()
-                .Where(s => s.SubscriberId == session.AccountId).Select(s => s.RecieverId).ToList();
-            debates = debates.Where(n => subscribes.Contains(n.AuthorId)).ToList();
-        }
         var htmlPage = template.Render(new { debates = debates , isAuthorized = isAuthorized });
 
         return  Encoding.UTF8.GetBytes(htmlPage);

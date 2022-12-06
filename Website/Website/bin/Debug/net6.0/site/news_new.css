@@ -1,50 +1,41 @@
-﻿body{
-    background-color:#B3E5FC;
-    border-radius: 10px;
+﻿.html{
+    font-family: Lato,sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-.justify-content-center{
-    display: flex;
-    justify-content: center!important;
+body{
+    background-image: url(https://redeeminggod.com/wp-content/uploads/2017/09/politcs.jpg);
+    background-repeat:no-repeat;
+    background-size:cover;
 }
 
-.card{
+.news_list{
     display: flex;
     justify-content: center;
-    width: 400px;
-    border: none;
-    border-radius: 10px;
-    background-color: #fff;
 }
 
-.stats{
-    background: #f2f5f8 !important;
-    color: #000 !important;
+a{
+    text-decoration: none;
+    color: #2a2b2b;
 }
 
-.articles{
-    font-size:10px;
-    color: #a1aab9;
-}
-
-.number1{
-    font-weight:500;
-}
-
-.followers{
-    font-size:10px;
-    color: #a1aab9;
-
-}
-.number2{
-    font-weight:500;
-}
-.rating{
-    font-size:10px;
-    color: #a1aab9;
-}
-.number3{
-    font-weight:500;
+.news {
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    align-content: center;
+    width: 100%;
+    border: 1px solid black;
+    padding: 2em;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 1.5;
+    margin-bottom: 1em;
 }
 
 .glow-on-hover {
@@ -102,6 +93,7 @@
 }
 
 .site-top{
+    margin: 30px;
     display: flex;
 }
 
@@ -112,3 +104,20 @@
     vertical-align: middle;
     line-height: 40px;
 }
+
+/*.create-news-link{*/
+/*    background-color: #0a53be;*/
+/*}*/
+
+
+@media only screen and (min-width: 64em){
+    .news {
+        width: 78%;
+        margin-right: 2%;
+        margin-bottom: 0;
+    }}
+
+@media only screen and (max-width: 75em){
+    html {
+        font-size: 14px;
+    }}

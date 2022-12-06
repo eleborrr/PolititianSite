@@ -25,6 +25,8 @@ public static class SessionManager
 
     public static bool IfAuthorized(HttpListenerContext listener)
     {
+        if (listener.Request.Cookies["SessionId"] is null)
+            return false;
         var cookie = listener.Request.Cookies["SessionId"].Value;
         if (cookie is null)
             return false;
@@ -36,7 +38,9 @@ public static class SessionManager
 
     public static Session? IfAuthorizedGetSession(HttpListenerContext listener)
     {
-        var expectedValue = listener.Request.Cookies["SessionId"].Value;
+        if (listener.Request.Cookies["SessionId"] is null)
+            return null;
+        var expectedValue = listener.Request.Cookies["SessionId"].Value;  // ломается при news без сессии
         if (expectedValue is null)
             return null;
         var key2 = new Guid(expectedValue);

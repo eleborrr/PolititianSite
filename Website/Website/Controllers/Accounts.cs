@@ -23,7 +23,16 @@ public class Accounts
         var template = Template.Parse(data);
         var rep = new AccountRepository(connectionString);
         var accounts = rep.GetElemList();
-        var htmlPage = template.Render(new { accounts = accounts });
+        var is_authorized = SessionManager.IfAuthorized(listener);
+        string htmlPage;
+        if (is_authorized)
+            htmlPage = template.Render(new
+            {
+                accounts = accounts, is_authorized = is_authorized,
+                id = SessionManager.IfAuthorizedGetSession(listener).AccountId
+            });
+        else
+            htmlPage = template.Render(new { accounts = accounts, is_authorized = is_authorized });
         return Encoding.UTF8.GetBytes(htmlPage);
     }
     

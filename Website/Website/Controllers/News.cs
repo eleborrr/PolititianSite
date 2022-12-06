@@ -23,14 +23,17 @@ public class News
         var isAuthorized = session is not null;
         var template = FileInspector.getTemplate("/Views/News.html");
         var news = new NewsRepository(connectionString).GetElemList().ToList();
+        string htmlPage;
         if (isAuthorized)
         {
             var subscribes = new AccountRepository(connectionString).GetSubscribers()
                 .Where(s => s.SubscriberId == session.AccountId).Select(s => s.RecieverId).ToList();
             news = news.Where(n => subscribes.Contains(n.AuthorId)).ToList();
-        }
-        var htmlPage = template.Render(new { news = news , isAuthorized = isAuthorized });
+            htmlPage = template.Render(new { news = news, isAuthorized = isAuthorized, id = session.AccountId });
 
+        }
+        else
+            htmlPage = template.Render(new { news = news, isAuthorized = isAuthorized});
         return  Encoding.UTF8.GetBytes(htmlPage);
     }
     

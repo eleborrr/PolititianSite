@@ -7,42 +7,104 @@
     <title>Some news</title>
 </head>
 <body>
-<div class="container">
-    <header>
-        <h1 class="heading-1">{{ news.title }}</h1>
-        <div class="sub-heading">
-            <p>Saterday, <span>{{ news.date }}</span></p>
-            <p class="importent">your right to know</p>
+<div class="site-top">
+    {{ if is_authorized }}
+    
+    <a href="/accounts/{{ id }}">
+        <div class="create-news-link glow-on-hover">
+            My profile
         </div>
-    </header>
-
-    <div class="main">
-        <div class="home">
-            
+    </a>
+    {{else}}
+    <a href="/accounts/login">
+        <div class="create-news-link glow-on-hover">
+            Login
         </div>
-
-        <article>
-            {{news.content}}           
-        </article>
-    </div>
-    <div>____________
-    </div>
-    <div class="comments">
-        {{for comment in comments }}
-        <div class="comment">
-            <div class="comment-top">
-                <div>{{comment.id}}</div>
-                <div><a href="/accounts/{{comment.author_id}}">{{authors[comment.author_id]}}</a></div>
-            </div>
-            <div class="comment-content">
-                {{comment.content}}
-            </div>
-            <div class="comment-bottom">
-                <div class="comment-bottom-content">{{comment.date}}</div>
+    </a>
+    {{ end }}
+    <a href="/accounts">
+        <div class="create-news-link glow-on-hover">
+            Accounts
+        </div>
+    </a>
+    <a href="/debates/">
+        <div class="create-news-link glow-on-hover">
+            Debates
+        </div>
+    </a>
+    <a href="/news/">
+        <div class="create-news-link glow-on-hover">
+            News
+        </div>
+    </a>
+    {{ if is_authorized }}
+    <a href="/accounts/logout">
+        <div class="create-news-link glow-on-hover">
+            Logout
+        </div>
+    </a>
+    {{ end }}
+</div>
+<div class="banner">
+    <div class="a-reset">
+        <a href="http://hltv.org/EksbCB4oDSANS1NLUFFLRUsbCB4oDTkFCAoMBAwHHSANS1NLLwYcGx0BKgYFHAQHJAANDQUMWEtFSxsIHioGHAcdGxAgGgZLU0s7PEtFSxsIHigNPQgOGktTEhRFSxsIHioFAAoCIA0MBx0ADwAMG0tTSxI1SwQIHQoBIA01S1NbWl9ZXFtQRTVLBg0NGjoMBQwKHQAGBzVLUzVLJyYnLDVLFEsU" rel="nofollow" data-link-tracking-page="Widget" data-link-tracking-column="[FourthColumnMiddle1]" data-link-tracking-destination="Click on [98] [button]">
+        <div class="column-ASdvuasdr123Gazx-box-header"><img alt="" class="column-ASdvuasdr123Gazx-box-header-img" loading="lazy" src="https://img-cdn.hltv.org/partnerimage/KhDRhb8IAkaO9eBS4rkaRL.png?ixlib=java-2.1.0&amp;s=f57f0d32667f782fcc24a4cdff1a2247" style="display: none !important;"></div>
+        <div class="column-ASdvuasdr123Gazx-box-content">
+            <div class="column-ASdvuasdr123Gazx-box-content-teams">
+                <div class="column-ASdvuasdr123Gazx-box-team">
+                    <div class="column-ASdvuasdr123Gazx-box-team-logo-container"><img alt="paiN" class="column-ASdvuasdr123Gazx-box-team-logo" srcset="https://img-cdn.hltv.org/teamlogo/x7znFH8_QjLXOQRyR2y7Xp.png?ixlib=java-2.1.0&amp;w=100&amp;s=9d82f86f4573bab52b77611afcddb595 2x" title="paiN" src="https://img-cdn.hltv.org/teamlogo/x7znFH8_QjLXOQRyR2y7Xp.png?ixlib=java-2.1.0&amp;w=50&amp;s=e4435bf7c351b546b867adc1d7886795"></div>
+                    <div class="column-ASdvuasdr123Gazx-box-odds">1.63</div>
+                </div>
+                <div class="column-ASdvuasdr123Gazx-box-team">
+                    <div class="column-ASdvuasdr123Gazx-box-team-logo-container"><img alt="00NATION" class="column-ASdvuasdr123Gazx-box-team-logo" srcset="https://img-cdn.hltv.org/teamlogo/Od-bsmsaAdzX8YM5nwhI-I.png?ixlib=java-2.1.0&amp;w=100&amp;s=8f6a63f99fb1599667312b0f2c31f88f 2x" title="00NATION" src="https://img-cdn.hltv.org/teamlogo/Od-bsmsaAdzX8YM5nwhI-I.png?ixlib=java-2.1.0&amp;w=50&amp;s=0999d900f3da8a73cf25a176df9be387"></div>
+                    <div class="column-ASdvuasdr123Gazx-box-odds">2.23</div>
                 </div>
             </div>
+            <div class="column-ASdvuasdr123Gazx-box-cta">ПОСТАВИТЬ</div>
         </div>
-        {{~ end ~}}
+    </a><a href="https://out.hltv.org/1xbet_new.php?placement=ASdvuasdr123Gazxreg&amp;ref=registration/" class="flex" data-link-tracking-page="Widget" data-link-tracking-column="[FourthColumnMiddle1]" data-link-tracking-destination="Click on [98] [button]">
+        <div class="column-ASdvuasdr123Gazx-box-bonus-container">
+            <div class="column-ASdvuasdr123Gazx-box-bonus">HLTVRU</div>
+            <div class="column-ASdvuasdr123Gazx-box-bonus-text">ПРОМОКОД</div>
+        </div>
+    </a></div>
+</div>
+
+<div class="container">
+        <header>
+            <h1 class="heading-1">{{ news.title }}</h1>
+            <div class="sub-heading">
+                <p><span>{{ news.date }}</span></p>
+                <p class="importent">your right to know</p>
+            </div>
+        </header>
+    
+        <div class="main">
+            <div class="home">
+                
+            </div>
+    
+            <article>
+                {{news.content}}           
+            </article>
+        </div>
+
+    <div class="comments">
+            {{for comment in comments }}
+            <div class="comment">
+                <div class="comment-top">
+                    <div>{{comment.id}}</div>
+                    <div><a href="/accounts/{{comment.author_id}}">{{authors[comment.author_id]}}</a></div>
+                </div>
+                <div class="comment-content">
+                    {{comment.content}}
+                </div>
+                <div class="comment-bottom">
+                    <div class="comment-bottom-content">{{comment.date}}</div>
+                </div>
+            </div>
+            {{~ end ~}}
+        </div>
     </div>
     {{ if is_authorized}}
     <div class="comment-add-field">
@@ -54,7 +116,6 @@
         </div>
     </div>
     {{ end }}
-</div>
 </body>
 <script>
     // document.getElementById('reply-element').style.display = 'none';

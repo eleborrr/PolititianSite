@@ -14,12 +14,16 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="bin\Debug\net6.0\site\accounts.css" />
       <Content Include="bin\Debug\net6.0\site\creation.css" />
       <None Include="bin\Debug\net6.0\site\news.css" />
       <None Include="bin\Debug\net6.0\site\site.css" />
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="bin\Debug\net6.0\site\news.css" />
+      <Content Include="bin\Debug\net6.0\site\news_new" />
+      <Content Include="bin\Debug\net6.0\site\news_new.css" />
       <Content Include="bin\Debug\net6.0\site\profile.css" />
       <Content Include="bin\Debug\net6.0\site\register.css" />
       <Content Include="bin\Debug\net6.0\site\registration.css" />

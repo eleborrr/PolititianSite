@@ -7,6 +7,45 @@
     <title>Some news</title>
 </head>
 <body>
+<div class="site-top">
+    {{ if is_authorized }}
+
+    <a href="/accounts/{{ id }}">
+        <div class="create-news-link glow-on-hover">
+            My profile
+        </div>
+    </a>
+    {{else}}
+    <a href="/accounts/login">
+        <div class="create-news-link glow-on-hover">
+            Login
+        </div>
+    </a>
+    {{ end }}
+    
+    <a href="/accounts">
+        <div class="create-news-link glow-on-hover">
+            Accounts
+        </div>
+    </a>
+    <a href="/debates/">
+        <div class="create-news-link glow-on-hover">
+            Debates
+        </div>
+    </a>
+    <a href="/news/">
+        <div class="create-news-link glow-on-hover">
+            News
+        </div>
+    </a>
+    {{ if is_authorized }}
+    <a href="/accounts/logout">
+        <div class="create-news-link glow-on-hover">
+            Logout
+        </div>
+    </a>
+    {{ end }}
+</div>
 <div class="container">
     <header>
         <h1 class="heading-1">{{ debate.title }}</h1>
@@ -25,8 +64,7 @@
             {{debate.content}}
         </article>
     </div>
-    <div>____________
-    </div>
+    
     <div class="comments">
         {{for message in messages }}
         <div class="comment">
