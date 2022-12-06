@@ -63,6 +63,20 @@ public static class SessionManager
     {
         return _cache.TryGetValue(id, out Session session)? session: null;
     }
+    
+    public static void CreateSession(HttpListenerContext listener, AccountRepository rep, string email, string password, string _remember_me)  // сделать валидацию, в логине при неполных данных эксепшн
+    {
+        bool remember_me = _remember_me == "on" ? true : false;
+        var guid = Guid.NewGuid();
+        var account = rep.GetElem(email, password);
+        var session = new Session(guid, account.Id, DateTime.Now); // обработка что акка нет
+        SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
+        listener.Response.Cookies.Add(new Cookie("SessionId",$"{session.Id}")
+        {
+            Expires = remember_me?DateTime.Now.AddYears(1):DateTime.Now.AddDays(1),
+            Path = "/",
+        });  
+    }
 }
 
 public class Session

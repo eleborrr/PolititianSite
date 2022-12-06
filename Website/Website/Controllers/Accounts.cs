@@ -133,7 +133,7 @@ public class Accounts
         if (acc is null)
         {
             rep.Insert(new Account(name, surname, password, about, organization, email));
-            CreateSession(listener, rep, email, password, remember_me);
+            SessionManager.CreateSession(listener, rep, email, password, remember_me);
         }
 
         acc = rep.GetElem(email, password);
@@ -188,7 +188,7 @@ public class Accounts
         var rep = new AccountRepository(connectionString);
         
         var acc = rep.GetElem(email, password); // if acc == null LOGIN ERROR
-        CreateSession(listener, rep, email, password, remember_me);
+        SessionManager.CreateSession(listener, rep, email, password, remember_me);
         listener.Response.Redirect("/news");
         // listener.Response.RedirectLocation = "/news";
         return new News().GetNews(listener);
@@ -235,17 +235,5 @@ public class Accounts
     }
     
 
-    private void CreateSession(HttpListenerContext listener, AccountRepository rep, string email, string password, string _remember_me)  // сделать валидацию, в логине при неполных данных эксепшн
-    {
-        bool remember_me = _remember_me == "on" ? true : false;
-        var guid = Guid.NewGuid();
-        var account = rep.GetElem(email, password);
-        var session = new Session(guid, account.Id, DateTime.Now); // обработка что акка нет
-        SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
-        listener.Response.Cookies.Add(new Cookie("SessionId",$"{session.Id}")
-        {
-            Expires = remember_me?DateTime.Now.AddYears(1):DateTime.Now.AddDays(1),
-            Path = "/",
-        });   // перенести в session manager
-    }
+    
 }
