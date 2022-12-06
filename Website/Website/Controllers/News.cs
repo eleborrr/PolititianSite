@@ -37,7 +37,7 @@ public class News
         return  Encoding.UTF8.GetBytes(htmlPage);
     }
     
-    [HttpGET(@"^[0-9]+$")] // $"#^[0-9]+$#"
+    [HttpGET(@"^[0-9]+$")]
     public byte[] GetNewsById(HttpListenerContext listener) 
     {
         int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());

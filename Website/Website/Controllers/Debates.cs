@@ -34,11 +34,11 @@ public class Debates
         bool isAuthorized = SessionManager.IfAuthorized(listener);
         var template = FileInspector.getTemplate("/Views/SingleDebate.html");
         var debate = new DebatesRepository(connectionString).GetElem(id);
-        var comments = new MessageRepository(connectionString).GetElemList().Where(c => c.DebateId == id).Distinct().ToList();
-        var commentsAuthorsId = comments.Select(c => c.AuthorId);
+        var messages = new MessageRepository(connectionString).GetElemList().Where(c => c.DebateId == id).Distinct().ToList();
+        var messagesAuthorsId = messages.Select(c => c.AuthorId);
         var authors = new AccountRepository(connectionString).GetElemList()
-            .Where(a => commentsAuthorsId.Contains(a.Id)).ToDictionary(key => key.Id, val => val.Name);
-        var htmlPage = template.Render(new { debate = debate, comments = comments, authors = authors, isAuthorized = isAuthorized});
+            .Where(a => messagesAuthorsId.Contains(a.Id)).ToDictionary(key => key.Id, val => val.Name);
+        var htmlPage = template.Render(new { debate = debate, messages = messages, authors = authors, isAuthorized = isAuthorized});
         return Encoding.UTF8.GetBytes(htmlPage);
     }
 
