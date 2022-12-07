@@ -31,18 +31,19 @@
                                 <input type="text" class="form-control" name="organization" id="organization" placeholder="Organization">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                <input type="password" class="form-control" name="password" onchange="Validate()" id="password" placeholder="Password">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="confirm-password" placeholder="confirm-password">
+                                <input type="password" class="form-control" id="confirm-password" onchange="Validate()" placeholder="confirm-password">
                             </div>
+                            <span id='message'></span>
                             <div class="form-group">
                                 <input type="checkbox" class="form-control" name="remember-me" id="remember-me" placeholder="Remember me">
                                 <label for="remember-me">Remember me</label>
                             </div>
                             <div class="d-flex flex-row align-items-center justify-content-between">
                                 <a href="/accounts/login">Login</a>
-                                <button class="btn btn-primary" type="submit">Create Account</button>
+                                <button class="btn btn-primary" id="submit" type="submit">Create Account</button>
                             </div>
                         </form>
                     </div>
@@ -52,3 +53,18 @@
     </div>
 </body>
 </html>
+<script>
+    function Validate(){
+    var password = document.getElementById("password").value;
+    var confirm_password = document.getElementById("confirm-password").value;
+    if(password != confirm_password) {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+        document.getElementById('submit').style.display = 'none';
+    }
+    else{
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+        document.getElementById('submit').style.display = 'block';
+    }}
+</script>

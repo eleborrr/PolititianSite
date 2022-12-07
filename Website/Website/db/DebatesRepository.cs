@@ -53,7 +53,7 @@ public class DebatesRepository : IRepository<Debate>
     public void Insert(Debate debate) // создание объекта
     {
         var queryString = $"INSERT INTO Debates (AuthorId, Likes, CreationDate, Content, Title, Dislikes) VALUES (\'{debate.AuthorId}\', \'{debate.Likes}\', " +
-                          $"\'{debate.Date}\', \'{debate.Title}\', \'{debate.Dislikes}\')";
+                          $"\'{debate.Date}\', N\'{debate.Content}\'  N\'{debate.Title}\', \'{debate.Dislikes}\')";
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();

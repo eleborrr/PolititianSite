@@ -23,8 +23,8 @@ public class AccountRepository
 
     public void Replace(Account acc)
     {
-        var queryString = $"UPDATE Accounts Set Name = \'{acc.Name}\', Surname = \'{acc.Surname}\', Password = \'{acc.Password}\'," +
-                          $"About = \'{acc.About}\', Organization = \'{acc.Organization}\', Email = \'{acc.Email}\' WHERE Id = \'{acc.Id}\'";
+        var queryString = $"UPDATE Accounts Set Name = N\'{acc.Name}\', Surname = N\'{acc.Surname}\', Password = N\'{acc.Password}\'," +
+                          $"About = N\'{acc.About}\', Organization = N\'{acc.Organization}\', Email = N\'{acc.Email}\' WHERE Id = \'{acc.Id}\'";
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
@@ -96,8 +96,8 @@ public class AccountRepository
 
     public void Insert(Account acc) // создание объекта
     {
-        var queryString = $"INSERT INTO Accounts (Name, Surname, Password, About, Organization, Email) VALUES (\'{acc.Name}\', \'{acc.Surname}\', " +
-                          $"\'{acc.Password}\', \'{acc.About}\', \'{acc.Organization}\', \'{acc.Email}\')";
+        var queryString = $"INSERT INTO Accounts (Name, Surname, Password, About, Organization, Email) VALUES (N\'{acc.Name}\', N\'{acc.Surname}\', " +
+                          $"N\'{acc.Password}\', N\'{acc.About}\', N\'{acc.Organization}\', N\'{acc.Email}\')";
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();

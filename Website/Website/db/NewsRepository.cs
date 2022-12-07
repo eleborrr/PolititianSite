@@ -51,7 +51,7 @@ public class NewsRepository : IRepository<Models.News>
     
     public void Insert(Models.News news) // создание объекта
     {
-        var queryString = $"INSERT INTO News (Title, Content, AuthorID) VALUES (\'{news.Title}\', \'{news.Content}\',  \'{news.AuthorId}\')";
+        var queryString = $"INSERT INTO News (Title, Content, AuthorID) VALUES (N\'{news.Title}\', N\'{news.Content}\',  \'{news.AuthorId}\')";
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();

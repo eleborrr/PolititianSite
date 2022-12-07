@@ -62,12 +62,11 @@ public class News
             return HttpServer.ReturnError404(listener.Response);
         using var sr = new StreamReader(listener.Request.InputStream, listener.Request.ContentEncoding);
         var bodyParam = sr.ReadToEnd();
-        var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
-        
+        var content = System.Web.HttpUtility.UrlDecode(bodyParam);
         var newsId = int.Parse(listener.Request.RawUrl.Split("/").Last());
 
         var rep = new CommentRepository(connectionString);
-        rep.Insert(new Comment(session.AccountId, newsId, bodyParam, 0, 0, DateTime.Today));
+        rep.Insert(new Comment(session.AccountId, newsId, content, 0, 0, DateTime.Today));
         return GetNewsById(listener);
     }
 

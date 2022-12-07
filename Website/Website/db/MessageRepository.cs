@@ -28,7 +28,7 @@ public class MessageRepository : IRepository<Message>
     public void Insert(Message comment) // создание объекта
     {
         var queryString = $"INSERT INTO Messages (AuthorId, DebateId, Content, Likes, Dislikes, Date) VALUES (\'{comment.AuthorId}\', \'{comment.DebateId}\'" +
-                          $", \'{comment.Content}\', \'{comment.Likes}\', \'{comment.Dislikes}\', \'{comment.Date.ToString("yyyy-MM-dd HH:mm:ss.fff")}\')";
+                          $", N\'{comment.Content}\', \'{comment.Likes}\', \'{comment.Dislikes}\', \'{comment.Date.ToString("yyyy-MM-dd HH:mm:ss.fff")}\')";
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();

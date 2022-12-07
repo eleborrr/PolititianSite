@@ -14,7 +14,7 @@ public static class SessionManager
         _cache.Remove(id);
     }
 
-    public static Session CreateSession(Guid id, Func<Session> createItem)
+    public static Session CreateCache(Guid id, Func<Session> createItem)
     {
         Session cacheEntry;
         if (!_cache.TryGetValue(id, out cacheEntry)) // Ищем ключ в кэше.
@@ -70,7 +70,7 @@ public static class SessionManager
         var guid = Guid.NewGuid();
         var account = rep.GetElem(email, password);
         var session = new Session(guid, account.Id, DateTime.Now); // обработка что акка нет
-        SessionManager.CreateSession(guid, () => session);  // точно ли такой ключ??
+        CreateCache(guid, () => session);  // точно ли такой ключ??
         listener.Response.Cookies.Add(new Cookie("SessionId",$"{session.Id}")
         {
             Expires = remember_me?DateTime.Now.AddYears(1):DateTime.Now.AddDays(1),
