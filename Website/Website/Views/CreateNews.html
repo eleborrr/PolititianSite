@@ -10,13 +10,14 @@
 <form method="post">
     <div class="wrapper">
         <h1>Displaying The Character Count of a Textarea</h1>
-        <textarea class="title" name="the-textarea-title" id="the-textarea-title" maxlength="300" placeholder="Start Typin..." autofocus></textarea>
-        <textarea class="content" name="the-textarea" id="the-textarea" maxlength="300" placeholder="Start Typin..." autofocus></textarea>
+        <textarea id="title" onchange="Validate()" class="title" name="the-textarea-title" id="the-textarea-title" maxlength="300" placeholder="Start Typin..." autofocus></textarea>
+        <textarea id="content" onchange="Validate()" class="content" name="the-textarea" id="the-textarea" maxlength="300" placeholder="Start Typin..." autofocus></textarea>
+        <span id='message'></span>
         <div id="the-count">
             <span id="current">0</span>
             <span id="maximum">/ 300</span>
         </div>
-        <button type="submit">Отправить</button>
+        <button id="submit" type="submit">Отправить</button>
     </div>
 </form>
 </body>
@@ -61,4 +62,19 @@
 
 
     });
+</script>
+<script>
+    function Validate(){
+        var title = document.getElementById("title").value;
+        var content = document.getElementById("content").value;
+        if(title == "" || content == "") {
+            document.getElementById('message').style.display = 'block';
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'fill inputs';
+            document.getElementById('submit').style.display = 'none';
+        }
+        else{
+            document.getElementById('message').style.display = 'none';
+            document.getElementById('submit').style.display = 'block';
+        }}
 </script>

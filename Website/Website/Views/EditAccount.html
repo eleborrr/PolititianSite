@@ -30,13 +30,14 @@
                                 <input type="text" class="form-control" value="{{ account.organization }}" name="organization" id="organization" placeholder="Organization">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                <input type="password" onchange="Validate()" class="form-control" name="password" id="password" placeholder="Password">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="confirm-password" placeholder="confirm-password">
+                                <input type="password" onchange="Validate()" class="form-control" id="confirm-password" placeholder="confirm-password">
                             </div>
+                            <span id='message'></span>
                             <div class="d-flex flex-row align-items-center justify-content-between">
-                                <button class="btn btn-primary" type="submit">Save</button>
+                                <button id="submit" class="btn btn-primary" type="submit">Save</button>
                             </div>
                         </form>
                     </div>
@@ -46,3 +47,18 @@
     </div>
 </body>
 </html>
+<script>
+    function Validate(){
+        var password = document.getElementById("password").value;
+        var confirm_password = document.getElementById("confirm-password").value;
+        if(password != confirm_password) {
+            document.getElementById('message').style.color = 'red';
+            document.getElementById('message').innerHTML = 'not matching';
+            document.getElementById('submit').style.display = 'none';
+        }
+        else{
+            document.getElementById('message').style.color = 'green';
+            document.getElementById('message').innerHTML = 'matching';
+            document.getElementById('submit').style.display = 'block';
+        }}
+</script>

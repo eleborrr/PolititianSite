@@ -38,10 +38,18 @@ public class News
     }
     
     [HttpGET(@"^[0-9]+$")]
-    public byte[] GetNewsById(HttpListenerContext listener) 
+    public byte[] GetNewsById(HttpListenerContext listener)
     {
-        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
-        
+        int id;
+        try
+        {
+            id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
+        }
+        catch (Exception ex)
+        {
+            id = int.Parse(listener.Response.Headers["Id"]);
+        }
+
         bool isAuthorized = SessionManager.IfAuthorized(listener);
         var template = FileInspector.getTemplate("/Views/SingleNews.html");
         var news = new NewsRepository(connectionString).GetElem(id);
@@ -95,18 +103,15 @@ public class News
         var bodyParam = sr.ReadToEnd();
         var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
 
-        var title = parsed["title"];
-        var content = parsed["content"];
+        var title = parsed["the-textarea-title"];
+        var content = parsed["the-textarea"];
 
         var rep = new NewsRepository(connectionString);
         
         rep.Insert(new Models.News(title, content, session.AccountId)); // AuthorId через сессию
         var newsId = rep.GetElemList().Last().Id;
         listener.Response.Redirect("/news/" + newsId);
+        listener.Response.AddHeader("Id", newsId.ToString());
         return GetNewsById(listener);
-        // return Encoding.UTF8.GetBytes(htmlPage);
     }
-    
-
-    
 }

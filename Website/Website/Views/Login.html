@@ -43,7 +43,7 @@
     function Validate(){
         var login = document.getElementById("email").value;
         var password = document.getElementById("password").value;
-        if(login == null || password == null) {
+        if(login == "" || password == "") {
             document.getElementById('message').style.display = 'block';
             document.getElementById('message').style.color = 'red';
             document.getElementById('message').innerHTML = 'fill inputs';
