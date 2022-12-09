@@ -12,6 +12,7 @@
 
 Есть возможность редактировать информацию по своему аккаунту. Постить дебаты. Постить новости. Искать в поиске пользователей.
 
+```mermaid
 classDiagram
 
     class Accounts {
@@ -67,3 +68,5 @@ classDiagram
     Messages ..> Debates : DebateId
     Debates ..> Accounts : AuthorId
     News ..> Accounts : AuthorId
+```
+
