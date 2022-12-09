@@ -28,7 +28,7 @@ public class DebatesRepository
     public void Insert(Debate debate) 
     {
         var queryString = $"INSERT INTO Debates (AuthorId, CreationDate, Content, Title) VALUES (\'{debate.AuthorId}\', " +
-                          $"\'{debate.Date}\', N\'{debate.Content}\',  N\'{debate.Title}\')";
+                          $"\'{debate.Date.ToString("yyyy-MM-dd HH:mm:ss.fff")}\', N\'{debate.Content}\',  N\'{debate.Title}\')";
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();
@@ -54,10 +54,10 @@ public class DebatesRepository
                     int id = reader.GetInt32(0);
                     int authorId = reader.GetInt32(1);
                     
-                    DateTime date = reader.GetDateTime(4);
-                    string content = reader.GetString(4);
-                    string title = reader.GetString(5);
-                    _debates.Add(new Debate(id,authorId, title, content, DateTime.Now));
+                    DateTime date = reader.GetDateTime(2);
+                    string content = reader.GetString(3);
+                    string title = reader.GetString(4);
+                    _debates.Add(new Debate(id,authorId, title, content, date));
                 }
             }
             reader.Close();

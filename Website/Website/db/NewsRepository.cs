@@ -26,7 +26,7 @@ public class NewsRepository
     
     public void Insert(Models.News news) // создание объекта
     {
-        var queryString = $"INSERT INTO News (Title, Content, AuthorID) VALUES (N\'{news.Title}\', N\'{news.Content}\',  \'{news.AuthorId}\')";
+        var queryString = $"INSERT INTO News (Title, Content, AuthorID, Date) VALUES (N\'{news.Title}\', N\'{news.Content}\',  \'{news.AuthorId}\' , \'{news.Date}\')";
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
@@ -53,10 +53,10 @@ public class NewsRepository
                     string title = reader.GetString(1);
                     string content = reader.GetString(2);
                     int authorId = reader.GetInt32(3);
-                    _news.Add(new Models.News(id, title, content, authorId));
+                    DateTime dateTime = reader.GetDateTime(4);
+                    _news.Add(new Models.News(id, title, content, authorId, dateTime));
                 }
             }
-
             reader.Close();
         }
     }

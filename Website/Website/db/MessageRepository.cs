@@ -20,7 +20,7 @@ public class MessageRepository
         return _messages;
     }
 
-    public Message? GetElem(int id) // получение одного объекта по id
+    public Message? GetElem(int id) 
     {
         return _messages.Find(acc => acc.Id == id);
     }
@@ -38,7 +38,7 @@ public class MessageRepository
         Update();
     }
 
-    void Update() // обновление объекта
+    void Update() 
     {
         _messages = new List<Message>();
         string sqlExpression = "SELECT * FROM Messages";

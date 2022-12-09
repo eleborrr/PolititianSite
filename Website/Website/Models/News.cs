@@ -14,21 +14,21 @@ public class News: IModel
     
     public DateTime Date { get; set; }
     
-    public News(int id, string title, string content, int authorId)  //, DateTime date
+    public News(int id, string title, string content, int authorId, DateTime date)
     {
         Id = id;
         Title = title;
         Content = content;
         AuthorId = authorId;
-        // Date = date;
+        Date = date;
     }
     
-    public News(string title, string content, int authorId)  //, DateTime date
+    public News(string title, string content, int authorId, DateTime date) 
     {
         Title = title;
         Content = content;
         AuthorId = authorId;
-        // Date = date;
+        Date = date;
     }
     
     

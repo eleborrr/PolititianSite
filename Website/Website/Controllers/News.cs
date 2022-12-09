@@ -74,7 +74,7 @@ public class News
         var newsId = int.Parse(listener.Request.RawUrl.Split("/").Last());
 
         var rep = new CommentRepository(connectionString);
-        rep.Insert(new Comment(session.AccountId, newsId, content, 0, 0, DateTime.Today));
+        rep.Insert(new Comment(session.AccountId, newsId, content, DateTime.Today));
         return GetNewsById(listener);
     }
 
@@ -108,7 +108,7 @@ public class News
 
         var rep = new NewsRepository(connectionString);
         
-        rep.Insert(new Models.News(title, content, session.AccountId)); // AuthorId через сессию
+        rep.Insert(new Models.News(title, content, session.AccountId,  DateTime.Now)); // AuthorId через сессию
         var newsId = rep.GetElemList().Last().Id;
         listener.Response.Redirect("/news/" + newsId);
         listener.Response.AddHeader("Id", newsId.ToString());

@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html>
+        <head>
+        <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="/news_new.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+<div class="site-top">
+    {{ if is_authorized }}
+    <a href="/news/create">
+        <div class="create-news-link glow-on-hover">
+            Create news
+        </div>
+    </a>
+    <a href="/accounts/{{ id }}">
+        <div class="create-news-link glow-on-hover">
+            My profile
+        </div>
+    </a>
+    {{else}}
+    <a href="/accounts/login">
+        <div class="create-news-link glow-on-hover">
+            Login
+        </div>
+    </a>
+    {{ end }}
+    <a href="/accounts">
+        <div class="create-news-link glow-on-hover">
+            Accounts
+        </div>
+    </a>
+    <a href="/debates/">
+        <div class="create-news-link glow-on-hover">
+            Debates
+        </div>
+    </a>
+    {{ if is_authorized }}
+    <a href="/accounts/logout">
+        <div class="create-news-link glow-on-hover">
+            Logout
+        </div>
+    </a>
+    {{ end }}
+</div>
+
+<div class="main page">
+    We are happy to see you on our site. On this platform we exptecing to see people around the world debating on important political topics and issues. 
+    Be kind, be welcome, find the truth with us.
+</div>
+</body>
+</html>

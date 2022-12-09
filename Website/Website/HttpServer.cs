@@ -26,11 +26,9 @@ namespace Political
 
         public void StartServer()
         {
-            // _serverSetting = JsonSerializer.Deserialize<ServerSettings>(File.ReadAllBytes("./settings.json"));
             _serverSetting = new ServerSettings();
             listener.Prefixes.Clear();
             listener.Prefixes.Add($"http://localhost:{_serverSetting.Port}/");
-            // PATH = _serverSetting.Path;
             listener.Start();
             Console.WriteLine("Server started");
             Listen();
@@ -77,7 +75,7 @@ namespace Political
                 }
                 catch (Exception ex)
                 {
-                    buffer = Encoding.ASCII.GetBytes(ex.Message);
+                    buffer = Encoding.ASCII.GetBytes("Sorry some errors on website. Please contact our support team.");
                 }
                 Stream output = response.OutputStream;
                 output.Write(buffer, 0, buffer.Length);
@@ -123,13 +121,17 @@ namespace Political
         private byte[]? MethodHandler(HttpListenerContext _httpContext, HttpListenerResponse response)
         {
             
-            if (_httpContext.Request.Url.Segments.Length < 2) return null;
-
-            string controllerName = _httpContext.Request.Url.Segments[1].Replace("/", "");
+            if (_httpContext.Request.Url.Segments.Length < 2 && _httpContext.Request.RawUrl != "/" 
+                                                             && _httpContext.Request.RawUrl != "") return null;
+            string controllerName;
+            if (_httpContext.Request.Url.Segments.Length > 1)
+                controllerName = _httpContext.Request.Url.Segments[1].Replace("/", "");
+            else
+                controllerName = "main";
             
             var assembly = Assembly.GetExecutingAssembly();
 
-            // походу здесь проверку на наличие названия Controller в атрибуте
+            var controllers = assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(HttpController)));
             var controller = assembly.GetTypes().Where(t => Attribute.IsDefined(t, typeof(HttpController)))
                 .FirstOrDefault(c => c.Name.ToLower() == controllerName.ToLower());
 
@@ -145,11 +147,9 @@ namespace Political
             
             //var queryParams = GetQuery(_httpContext, method);
             
-            var ret = method.Invoke(Activator.CreateInstance(controller), new object[]{_httpContext});  // пока впихну чисто листенер, но вообще куериПарамс
-            response.ContentType = "text/html";  // навернр не всегда должен быть text/html
-            byte[] buffer = (byte[])ret; // норм или нет..?
-            // byte[] buffer = Encoding.UTF8.GetBytes(ret);
-            // byte[] buffer = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(ret));
+            var ret = method.Invoke(Activator.CreateInstance(controller), new object[]{_httpContext}); 
+            response.ContentType = "text/html";  
+            byte[] buffer = (byte[])ret; 
             Console.WriteLine(_httpContext.Request.HttpMethod);
             return buffer;
         }

@@ -29,7 +29,15 @@ public class Debates
     [HttpGET(@"^[0-9]+$")] // $"#^[0-9]+$#"
     public byte[] GetDebateById(HttpListenerContext listener) 
     {
-        int id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
+        int id;
+        try
+        {
+            id = int.Parse(listener.Request.RawUrl.Split("/").LastOrDefault());
+        }
+        catch (Exception ex)
+        {
+            id = int.Parse(listener.Response.Headers["Id"]);
+        }
         
         bool isAuthorized = SessionManager.IfAuthorized(listener);
         var template = FileInspector.getTemplate("/Views/SingleDebate.html");
@@ -93,6 +101,7 @@ public class Debates
         rep.Insert(new Models.Debate(author_id, title, content,  DateTime.Now)); // AuthorId через сессию
         var debateId = rep.GetElemList().Last().Id;
         listener.Response.Redirect("/debates/" + debateId);
+        listener.Response.AddHeader("Id", debateId.ToString());
         return GetDebateById(listener);
     }
 }
