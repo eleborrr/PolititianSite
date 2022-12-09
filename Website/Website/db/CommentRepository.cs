@@ -27,8 +27,8 @@ public class CommentRepository
 
     public void Insert(Comment comment) // создание объекта
     {
-        var queryString = $"INSERT INTO Comments (AuthorId, NewsId, Content, Likes, Dislikes, Date) VALUES (\'{comment.AuthorId}\', \'{comment.NewsId}\'" +
-                          $", N\'{comment.Content}\', \'{comment.Likes}\', \'{comment.Dislikes}\', \'{comment.Date.ToString("yyyy-MM-dd HH:mm:ss.fff")}\')";
+        var queryString = $"INSERT INTO Comments (AuthorId, NewsId, Content, Date) VALUES (\'{comment.AuthorId}\', \'{comment.NewsId}\'" +
+                          $", N\'{comment.Content}\', \'{comment.Date.ToString("yyyy-MM-dd HH:mm:ss.fff")}\')";
         using (SqlConnection connection = new SqlConnection(connectionString))
         {
             connection.Open();
@@ -56,10 +56,8 @@ public class CommentRepository
                     int authorId = reader.GetInt32(1);
                     int newsId = reader.GetInt32(2);
                     string content = reader.GetString(3);
-                    int likes = reader.GetInt32(4);
-                    int dislikes = reader.GetInt32(5);
-                    DateTime date = reader.GetDateTime(6);
-                    _comments.Add(new Comment(id, authorId, newsId, content, likes, dislikes, date));
+                    DateTime date = reader.GetDateTime(4);
+                    _comments.Add(new Comment(id, authorId, newsId, content, date));
                 }
             }
 

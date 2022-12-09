@@ -56,7 +56,7 @@ public class Debates
         var debateId = int.Parse(listener.Request.RawUrl.Split("/").Last());
 
         var rep = new MessageRepository(connectionString);
-        rep.Insert(new Message(session.AccountId, debateId, bodyParam, 0, 0, DateTime.Today));
+        rep.Insert(new Message(session.AccountId, debateId, bodyParam, DateTime.Today));
         return GetDebateById(listener);
     }
 
@@ -90,7 +90,7 @@ public class Debates
         var title = parsed["the-textarea-title"];
         var rep = new DebatesRepository(connectionString);
         
-        rep.Insert(new Models.Debate(author_id, title, content, 0, 0, DateTime.Now)); // AuthorId через сессию
+        rep.Insert(new Models.Debate(author_id, title, content,  DateTime.Now)); // AuthorId через сессию
         var debateId = rep.GetElemList().Last().Id;
         listener.Response.Redirect("/debates/" + debateId);
         return GetDebateById(listener);

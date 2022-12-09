@@ -11,31 +11,23 @@ public class Debate: IModel
     public string Title { get; set; }
     
     public string Content { get; set; }
-    
-    public int Likes { get; set; }
-    
-    public int Dislikes { get; set; }
-    
+
     public DateTime Date { get; set; }
     
-    public Debate(int id, int authorId, string title, string content, int likes, int dislikes, DateTime date)
+    public Debate(int id, int authorId, string title, string content, DateTime date)
     {
         Id = id;
         AuthorId = authorId;
         Title = title;
         Content = content;
-        Likes = likes;
-        Dislikes = dislikes;
         Date = date;
     }
     
-    public Debate(int authorId, string title, string content, int likes, int dislikes, DateTime date)
+    public Debate(int authorId, string title, string content, DateTime date)
     {
         AuthorId = authorId;
         Title = title;
         Content = content;
-        Likes = likes;
-        Dislikes = dislikes;
         Date = date;
     }
 }

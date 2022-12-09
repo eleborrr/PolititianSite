@@ -25,10 +25,10 @@ public class DebatesRepository
         return _debates.Where(debate => debate.Id == id).FirstOrDefault();
     }
 
-    public void Insert(Debate debate) // создание объекта
+    public void Insert(Debate debate) 
     {
-        var queryString = $"INSERT INTO Debates (AuthorId, Likes, CreationDate, Content, Title, Dislikes) VALUES (\'{debate.AuthorId}\', \'{debate.Likes}\', " +
-                          $"\'{debate.Date}\', N\'{debate.Content}\',  N\'{debate.Title}\', \'{debate.Dislikes}\')";
+        var queryString = $"INSERT INTO Debates (AuthorId, CreationDate, Content, Title) VALUES (\'{debate.AuthorId}\', " +
+                          $"\'{debate.Date}\', N\'{debate.Content}\',  N\'{debate.Title}\')";
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();
@@ -38,7 +38,7 @@ public class DebatesRepository
         Update();
     }
     
-    void Update() // обновление объекта
+    void Update() 
     {
         string sqlExpression = "SELECT * FROM Debates";
         using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -53,13 +53,11 @@ public class DebatesRepository
                 {
                     int id = reader.GetInt32(0);
                     int authorId = reader.GetInt32(1);
-                    int likes = reader.GetInt32(2);
                     
-                    //DateTime date = reader.GetDateTime(4);
+                    DateTime date = reader.GetDateTime(4);
                     string content = reader.GetString(4);
                     string title = reader.GetString(5);
-                    int dislikes = reader.GetInt32(6);
-                    _debates.Add(new Debate(id,authorId, title, content, likes, dislikes, DateTime.Now));
+                    _debates.Add(new Debate(id,authorId, title, content, DateTime.Now));
                 }
             }
             reader.Close();
