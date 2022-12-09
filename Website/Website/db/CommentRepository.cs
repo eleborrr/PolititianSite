@@ -4,7 +4,7 @@ using Political.Controllers;
 
 namespace Political;
 
-public class CommentRepository : IRepository<Comment>
+public class CommentRepository
 {
     private List<Comment> _comments = new List<Comment>();
     private string connectionString;
@@ -65,30 +65,5 @@ public class CommentRepository : IRepository<Comment>
 
             reader.Close();
         }
-    }
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Create(Comment item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(Comment item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Save()
-    {
-        throw new NotImplementedException();
     }
 }

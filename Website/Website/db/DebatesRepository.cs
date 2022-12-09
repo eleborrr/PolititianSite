@@ -4,7 +4,7 @@ using Political.Models;
 
 namespace Political;
 
-public class DebatesRepository : IRepository<Debate>
+public class DebatesRepository
 {
     private List<Debate> _debates = new List<Debate>();
     private string _connectionString;
@@ -13,11 +13,6 @@ public class DebatesRepository : IRepository<Debate>
     {
         _connectionString = connectionString;
         Update();
-    }
-    
-    public void Dispose()
-    {
-        throw new NotImplementedException();
     }
 
     public IEnumerable<Debate> GetElemList()
@@ -30,30 +25,10 @@ public class DebatesRepository : IRepository<Debate>
         return _debates.Where(debate => debate.Id == id).FirstOrDefault();
     }
 
-    public void Create(Debate item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(Debate item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Save()
-    {
-        throw new NotImplementedException();
-    }
-    
     public void Insert(Debate debate) // создание объекта
     {
         var queryString = $"INSERT INTO Debates (AuthorId, Likes, CreationDate, Content, Title, Dislikes) VALUES (\'{debate.AuthorId}\', \'{debate.Likes}\', " +
-                          $"\'{debate.Date}\', N\'{debate.Content}\'  N\'{debate.Title}\', \'{debate.Dislikes}\')";
+                          $"\'{debate.Date}\', N\'{debate.Content}\',  N\'{debate.Title}\', \'{debate.Dislikes}\')";
         using (SqlConnection connection = new SqlConnection(_connectionString))
         {
             connection.Open();

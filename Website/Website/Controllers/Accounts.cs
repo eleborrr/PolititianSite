@@ -75,7 +75,14 @@ public class Accounts
         bool ownProfile = false;
         if (session is not null)
             ownProfile = session.AccountId == id;
-        var htmlPage = template.Render(new { account = account, isAuthorized = isAuthorized, isSubscribed = isSubscribed, ownProfile = ownProfile});
+
+        var followers_count = rep.GetSubscribers().Count(s => s.RecieverId == id);
+        var news = new NewsRepository(connectionString).GetElemList().Where(a => a.AuthorId == id).ToList();
+        
+        var htmlPage = template.Render(new { account = account, isAuthorized = isAuthorized,
+            isSubscribed = isSubscribed, ownProfile = ownProfile, followers_count = followers_count, articles_count = news.Count(), news = news});
+        
+        
         return Encoding.UTF8.GetBytes(htmlPage);
     }
     

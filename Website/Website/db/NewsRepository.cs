@@ -3,7 +3,7 @@ using Political.Controllers;
 
 namespace Political;
 
-public class NewsRepository : IRepository<Models.News>
+public class NewsRepository
 {
     private List<Models.News> _news = new List<Models.News>();
     private string connectionString;
@@ -12,11 +12,6 @@ public class NewsRepository : IRepository<Models.News>
     {
         this.connectionString = connectionString;
         Update();
-    }
-    
-    public void Dispose()
-    {
-        throw new NotImplementedException();
     }
 
     public IEnumerable<Models.News> GetElemList()
@@ -27,26 +22,6 @@ public class NewsRepository : IRepository<Models.News>
     public Models.News GetElem(int id)
     {
         return _news.Where(news => news.Id == id).FirstOrDefault();
-    }
-
-    public void Create(Models.News item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(Models.News item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Save()
-    {
-        throw new NotImplementedException();
     }
     
     public void Insert(Models.News news) // создание объекта

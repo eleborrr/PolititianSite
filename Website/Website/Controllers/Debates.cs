@@ -86,8 +86,8 @@ public class Debates
         var parsed = System.Web.HttpUtility.ParseQueryString(bodyParam);
 
         var author_id = session.AccountId;
-        var content = parsed["content"];
-        var title = parsed["title"];
+        var content = parsed["the-textarea"];
+        var title = parsed["the-textarea-title"];
         var rep = new DebatesRepository(connectionString);
         
         rep.Insert(new Models.Debate(author_id, title, content, 0, 0, DateTime.Now)); // AuthorId через сессию

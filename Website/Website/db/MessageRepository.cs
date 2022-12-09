@@ -4,7 +4,7 @@ using Political.Controllers;
 
 namespace Political;
 
-public class MessageRepository : IRepository<Message>
+public class MessageRepository
 {
     private List<Message> _messages = new List<Message>();
     private string connectionString;
@@ -65,30 +65,5 @@ public class MessageRepository : IRepository<Message>
 
             reader.Close();
         }
-    }
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Create(Message item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Update(Message item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Save()
-    {
-        throw new NotImplementedException();
     }
 }
